@@ -1,3 +1,4 @@
 type: runtime
-entrypoint: cargo run --release
+startup: rustup install nightly
+entrypoint: cargo +nightly run --release 
 http_proxy: 8080
