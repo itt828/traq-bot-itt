@@ -1,6 +1,5 @@
 type: runtime
 startup: |
-  pacman -S rust
   cargo build --release
 entrypoint: ./target/release/itt-bot
 http_proxy: 8080
