@@ -1,0 +1,4 @@
+type: runtime
+startup: cargo build --release
+entrypoint: target/release/itt-bot
+http_proxy: 8080
