@@ -1,5 +1,4 @@
 use axum::{extract::Json, routing::any, Router};
-use dotenv::dotenv;
 use http::{HeaderMap, StatusCode};
 use hyper::{Body, Client, Method, Request};
 use serde_json::Value;
@@ -8,8 +7,7 @@ use std::net::SocketAddr;
 
 #[tokio::main]
 async fn main() {
-    dotenv().ok();
-    let addr = SocketAddr::from(([127, 0, 0, 1], 8080));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
     let app = Router::new().route("/", any(handler));
     println!("serving at {}", addr);
     axum::Server::bind(&addr)
