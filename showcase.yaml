@@ -1,7 +1,6 @@
 type: runtime
 startup: |
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-  
+  pacman -S rust
   cargo build --release
-entrypoint: cargo run --release
+entrypoint: ./target/release/itt-bot
 http_proxy: 8080
