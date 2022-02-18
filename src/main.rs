@@ -38,6 +38,7 @@ async fn handler(body: Json<Value>, headers: HeaderMap) -> StatusCode {
 }
 async fn handle_event(event: &str, body: Json<Value>) -> StatusCode {
     if event == "PING" {
+        println!("PING");
         return StatusCode::NO_CONTENT;
     } else if event == "MESSAGE_CREATED" {
         handle_message_created(body).await;
