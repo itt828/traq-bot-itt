@@ -30,13 +30,10 @@ async fn handler(body: Json<Value>, headers: HeaderMap) -> StatusCode {
     }
     let event = event.unwrap();
     if is_token_valid(token) {
-        handle_event(event, body).await;
-        println!("event processed");
+        return handle_event(event, body).await;
     } else {
         return StatusCode::UNAUTHORIZED;
     }
-    println!("Something wrong.");
-    StatusCode::BAD_REQUEST
 }
 async fn handle_event(event: &str, body: Json<Value>) -> StatusCode {
     if event == "PING" {
