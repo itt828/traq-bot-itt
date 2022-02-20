@@ -1,7 +1,7 @@
 use axum::{extract::Json, routing::any, Router};
 use http::{HeaderMap, StatusCode};
 use hyper::{Body, Client, Method, Request};
-use serde_json::Value;
+use serde_json::{json, Value};
 use std::env;
 use std::net::SocketAddr;
 
@@ -49,6 +49,7 @@ async fn handle_event(event: &str, body: Json<Value>) -> StatusCode {
 async fn handle_message_created(body: Json<Value>) {
     let text = body["message"]["plainText"].to_string();
     let channel_id = body["message"]["channelId"].to_string();
+    println!("text = {}, channel_id = {}", text, channel_id);
     if body["message"]["user"]["bot"] == true {
         println!("message from bot");
     } else {
@@ -75,10 +76,13 @@ async fn post_to_traq(text: String, channel_id: String) {
                 env::var("BOT_ACCESS_TOKEN").expect("BOT_ACCESS_TOKEN not found")
             ),
         )
-        .body(Body::from(format!(
-            "{{\"content\":{},\"embed\":true}}",
-            text
-        )))
+        .body(Body::from(
+            json!({
+              "content": text,
+              "embed": true
+            })
+            .to_string(),
+        ))
         .unwrap();
     println!("{:?}", req);
     let client = Client::new();
