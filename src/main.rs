@@ -80,6 +80,7 @@ async fn post_to_traq(text: String, channel_id: String) {
             text
         )))
         .unwrap();
+    println!("{:?}", req);
     let client = Client::new();
     let resp = client.request(req).await.unwrap();
     println!("Response: {}", resp.status());
