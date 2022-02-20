@@ -1,0 +1,13 @@
+name: deploy showcase
+on: [push]
+jobs:
+  deploy-showcase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout 
+        uses: actions/checkout@v2
+      - name: build rust
+        run:  cargo build --release
+      - name: scp deploy
+        run:  
+
