@@ -49,10 +49,11 @@ async fn handle_event(event: &str, body: Json<Value>) -> StatusCode {
 async fn handle_message_created(body: Json<Value>) {
     let text = body["message"]["plainText"].to_string();
     let channel_id = body["message"]["channelId"].to_string();
-    if body["message"]["user"]["bot"].is_boolean() {
+    if body["message"]["user"]["bot"] == true {
         println!("message from bot");
+    } else {
+        post_to_traq(text, channel_id).await;
     }
-    post_to_traq(text, channel_id).await;
 }
 
 fn is_token_valid(token: String) -> bool {
