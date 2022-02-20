@@ -1,5 +1,6 @@
 type: runtime
 startup: |
   wget https://github.com/itt828/traq-bot-itt/releases/latest/download/itt-bot 
-entrypoint: itt-bot
+  chmod 777 ./itt-bot 
+entrypoint: ./itt-bot
 http_proxy: 8080
