@@ -1,5 +1,6 @@
 type: runtime
 startup: |
+  rm -rf ./*
   wget https://github.com/itt828/traq-bot-itt/releases/latest/download/itt-bot 
   chmod 777 ./itt-bot 
 entrypoint: ./itt-bot
