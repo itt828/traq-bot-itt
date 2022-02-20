@@ -48,13 +48,19 @@ async fn handle_event(event: &str, body: Json<Value>) -> StatusCode {
 
 async fn handle_message_created(body: Json<Value>) {
     let text = body["message"]["plainText"].to_string();
+    let text = remove_double_quotes(text);
     let channel_id = body["message"]["channelId"].to_string();
+    let channel_id = remove_double_quotes(channel_id);
     println!("text = {}, channel_id = {}", text, channel_id);
     if body["message"]["user"]["bot"] == true {
         println!("message from bot");
     } else {
         post_to_traq(text, channel_id).await;
     }
+}
+fn remove_double_quotes(string: String) -> String {
+    let le = string.len();
+    string[1..le - 1].to_string()
 }
 
 fn is_token_valid(token: String) -> bool {
