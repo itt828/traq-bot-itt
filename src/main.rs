@@ -31,6 +31,7 @@ async fn handler(body: Json<Value>, headers: HeaderMap) -> StatusCode {
     let event = event.unwrap();
     if is_token_valid(token) {
         handle_event(event, body).await;
+        println!("event processed");
     } else {
         return StatusCode::UNAUTHORIZED;
     }
