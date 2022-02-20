@@ -34,6 +34,7 @@ async fn handler(body: Json<Value>, headers: HeaderMap) -> StatusCode {
     } else {
         return StatusCode::UNAUTHORIZED;
     }
+    println!("Something wrong.");
     StatusCode::BAD_REQUEST
 }
 async fn handle_event(event: &str, body: Json<Value>) -> StatusCode {
