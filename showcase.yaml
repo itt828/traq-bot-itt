@@ -1,5 +1,5 @@
 type: runtime
 startup: |
-  wget -P /usr/local/bin https://github.com/itt828/traq-bot-itt/releases/latest/download/itt-bot 
-entrypoint: /usr/local/bin/itt-bot
+  wget https://github.com/itt828/traq-bot-itt/releases/latest/download/itt-bot 
+entrypoint: itt-bot
 http_proxy: 8080
