@@ -1,6 +1,7 @@
 use axum::{extract::Json, routing::any, Router};
 use http::{HeaderMap, StatusCode};
 use hyper::{Body, Client, Method, Request};
+use hyper_tls::HttpsConnector;
 use serde_json::{json, Value};
 use std::env;
 use std::net::SocketAddr;
@@ -91,7 +92,8 @@ async fn post_to_traq(text: String, channel_id: String) {
         ))
         .unwrap();
     println!("{:?}", req);
-    let client = Client::new();
+    let https = HttpsConnector::new();
+    let client = Client::builder().build::<_, Body>(https);
     let resp = client.request(req).await.unwrap();
     println!("Response: {}", resp.status());
 }
