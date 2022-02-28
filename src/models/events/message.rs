@@ -12,9 +12,15 @@ struct MessageCreated {
 #[serde(rename_all = "camelCase")]
 struct MessageDeleted {
     event_time: String,
-    message: Message,
+    message: DelMessage,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct DelMessage {
+    id: String,
+    channel_id: String,
+}
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct MessageUpdated {
@@ -33,7 +39,7 @@ struct DirectMessageCreated {
 #[serde(rename_all = "camelCase")]
 struct DirectMessageDeleted {
     event_time: String,
-    message: Message,
+    message: DelMessage,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

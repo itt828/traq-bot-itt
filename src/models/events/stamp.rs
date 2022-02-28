@@ -2,6 +2,7 @@ use super::base::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 struct StampCreated {
     event_time: String,
     id: String,
