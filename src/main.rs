@@ -5,7 +5,7 @@ use hyper_tls::HttpsConnector;
 use serde_json::{json, Value};
 use std::env;
 use std::net::SocketAddr;
-
+mod models;
 #[tokio::main]
 async fn main() {
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
