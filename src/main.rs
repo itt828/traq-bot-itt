@@ -7,7 +7,7 @@ use http::{HeaderMap, StatusCode};
 use serde_json::Value;
 use std::env;
 use std::net::SocketAddr;
-
+mod models;
 #[tokio::main]
 async fn main() {
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
