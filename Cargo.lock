@@ -321,7 +321,7 @@ checksum = "1aab8fc367588b89dcee83ab0fd66b72b50b72fa1904d7095045ace2b0c81c35"
 
 [[package]]
 name = "itt-bot"
-version = "1.0.8"
+version = "1.0.9"
 dependencies = [
  "axum",
  "http",
