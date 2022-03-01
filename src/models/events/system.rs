@@ -2,22 +2,22 @@ use super::base::*;
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct Ping {
-    event_time: String,
+pub struct Ping {
+    pub event_time: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct Joined {
-    event_time: String,
-    channel: Channel,
+pub struct Joined {
+    pub event_time: String,
+    pub channel: Channel,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct Left {
-    event_time: String,
-    channel: Channel,
+pub struct Left {
+    pub event_time: String,
+    pub channel: Channel,
 }
 
 #[cfg(test)]

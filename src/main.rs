@@ -1,13 +1,16 @@
 mod actions;
+mod models;
 mod requests;
 mod utils;
-use actions::*;
+use crate::models::events::system::Ping;
+use actions::message::handle_message_created;
+use actions::system::handle_ping;
 use axum::{extract::Json, routing::any, Router};
 use http::{HeaderMap, StatusCode};
-use serde_json::Value;
+use models::events::message::MessageCreated;
+use serde_json::{from_value, Value};
 use std::env;
 use std::net::SocketAddr;
-mod models;
 #[tokio::main]
 async fn main() {
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
@@ -38,10 +41,12 @@ async fn handler(body: Json<Value>, headers: HeaderMap) -> StatusCode {
         return StatusCode::UNAUTHORIZED;
     }
 }
-async fn handle_event(event: &str, body: Json<Value>) -> StatusCode {
+async fn handle_event(event: &str, Json(body): Json<Value>) -> StatusCode {
     match event {
-        "PING" => handle_ping(body),
-        "MESSAGE_CREATED" => handle_message_created(body).await,
+        "PING" => handle_ping(from_value::<Ping>(body).unwrap()),
+        "MESSAGE_CREATED" => {
+            handle_message_created(from_value::<MessageCreated>(body).unwrap()).await
+        }
         _ => StatusCode::NOT_IMPLEMENTED,
     }
 }

@@ -3,75 +3,75 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Channel {
-    id: String,
-    name: String,
-    path: String,
-    parent_id: String,
-    creator: Creator,
-    created_at: String,
-    updated_at: String,
+    pub id: String,
+    pub name: String,
+    pub path: String,
+    pub parent_id: String,
+    pub creator: Creator,
+    pub created_at: String,
+    pub updated_at: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Creator {
-    id: String,
-    name: String,
-    display_name: String,
-    icon_id: String,
-    bot: bool,
+    pub id: String,
+    pub name: String,
+    pub display_name: String,
+    pub icon_id: String,
+    pub bot: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Message {
-    id: String,
-    user: User,
-    channel_id: String,
-    text: String,
-    plain_text: String,
-    embedded: Vec<EmbedInfo>,
-    created_at: String,
-    updated_at: String,
+    pub id: String,
+    pub user: User,
+    pub channel_id: String,
+    pub text: String,
+    pub plain_text: String,
+    pub embedded: Vec<EmbedInfo>,
+    pub created_at: String,
+    pub updated_at: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Updater {
-    id: String,
-    name: String,
-    display_name: String,
-    icon_id: String,
-    bot: String,
+    pub id: String,
+    pub name: String,
+    pub display_name: String,
+    pub icon_id: String,
+    pub bot: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Stamp {
-    stamp_id: String,
-    user_id: String,
-    count: u32,
-    created_at: String,
-    updated_at: String,
+    pub stamp_id: String,
+    pub user_id: String,
+    pub count: u32,
+    pub created_at: String,
+    pub updated_at: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EmbedInfo {
-    raw: String,
+    pub raw: String,
     #[serde(rename = "type")]
-    embed_type: String,
-    id: String,
+    pub embed_type: String,
+    pub id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct User {
-    id: String,
-    name: String,
-    display_name: String,
-    icon_id: String,
-    bot: bool,
+    pub id: String,
+    pub name: String,
+    pub display_name: String,
+    pub icon_id: String,
+    pub bot: bool,
 }
 
 #[cfg(test)]

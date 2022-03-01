@@ -3,58 +3,58 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct MessageCreated {
-    event_time: String,
-    message: Message,
+pub struct MessageCreated {
+    pub event_time: String,
+    pub message: Message,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct MessageDeleted {
-    event_time: String,
-    message: DelMessage,
+pub struct MessageDeleted {
+    pub event_time: String,
+    pub message: DelMessage,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct DelMessage {
-    id: String,
-    channel_id: String,
+pub struct DelMessage {
+    pub id: String,
+    pub channel_id: String,
 }
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct MessageUpdated {
-    event_time: String,
-    message: Message,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-struct DirectMessageCreated {
-    event_time: String,
-    message: Message,
+pub struct MessageUpdated {
+    pub event_time: String,
+    pub message: Message,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct DirectMessageDeleted {
-    event_time: String,
-    message: DelMessage,
+pub struct DirectMessageCreated {
+    pub event_time: String,
+    pub message: Message,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct DirectMessageUpdated {
-    event_time: String,
-    message: Message,
+pub struct DirectMessageDeleted {
+    pub event_time: String,
+    pub message: DelMessage,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct BotMessageStampsUpdated {
-    event_time: String,
-    message_id: String,
-    stamps: Vec<Stamp>,
+pub struct DirectMessageUpdated {
+    pub event_time: String,
+    pub message: Message,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BotMessageStampsUpdated {
+    pub event_time: String,
+    pub message_id: String,
+    pub stamps: Vec<Stamp>,
 }
 
 #[cfg(test)]
