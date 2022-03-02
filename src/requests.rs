@@ -39,7 +39,7 @@ pub async fn post_message(content: String, channel_id: String) {
 
 pub async fn post_stamp(message_id: String, stamp_id: String, count: u64) {
     let url = format!(
-        "https://q.trap.jp/api/v3/{}/stamps/{}",
+        "https://q.trap.jp/api/v3/messages/{}/stamps/{}",
         message_id, stamp_id
     );
     let auth_value = format!(
