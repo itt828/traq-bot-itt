@@ -1,4 +1,4 @@
-use hyper::{header, Body, Client, Method, Request};
+use hyper::{Body, Client, Method, Request};
 use hyper_tls::HttpsConnector;
 use serde_json::json;
 use std::env;
