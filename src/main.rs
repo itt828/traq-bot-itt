@@ -45,7 +45,7 @@ async fn handler(body: Json<Value>, headers: HeaderMap) -> StatusCode {
 async fn handle_event(event: &str, Json(body): Json<Value>) -> StatusCode {
     match event {
         "PING" => handle_ping(from_value::<Ping>(body).unwrap()),
-        "MESSAGE_CREATED" => {
+        "MESSAGE_CREATED" | "DIRECT_MESSAGE_CREATED" => {
             handle_message_created(from_value::<MessageCreated>(body).unwrap()).await
         }
         _ => StatusCode::NOT_IMPLEMENTED,
