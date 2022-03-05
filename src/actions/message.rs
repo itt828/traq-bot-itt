@@ -1,7 +1,9 @@
 use crate::models::events::message::*;
+use crate::patterns::is_gacha;
 use crate::requests::{post_message, post_stamp};
 use http::StatusCode;
-
+use std::thread;
+use std::time;
 pub async fn handle_message_created(body: MessageCreated) -> StatusCode {
     println!(
         "[{}] MESSAGE_CREATED from: {}, content: {}, channel_id: {}, bot: {}",
@@ -12,7 +14,11 @@ pub async fn handle_message_created(body: MessageCreated) -> StatusCode {
         body.message.user.bot,
     );
     if !body.message.user.bot {
-        post_message(body.message.plain_text, body.message.channel_id).await;
+        if is_gacha(body.message.plain_text) {
+            let content = format!(":nige_dot: https://q.trap.jp/messages/{}", body.message.id);
+            thread::sleep(time::Duration::from_secs(5));
+            post_message(content, body.message.channel_id).await;
+        }
     }
     post_stamp(
         body.message.id,

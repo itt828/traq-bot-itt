@@ -1,5 +1,6 @@
 mod actions;
 mod models;
+mod patterns;
 mod requests;
 mod utils;
 use crate::models::events::system::Ping;
