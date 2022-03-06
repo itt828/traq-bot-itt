@@ -16,8 +16,10 @@ pub async fn handle_message_created(body: MessageCreated) -> StatusCode {
     if !body.message.user.bot {
         if is_gacha(body.message.plain_text) {
             let content = format!(":nige_dot: https://q.trap.jp/messages/{}", body.message.id);
-            thread::sleep(time::Duration::from_secs(5));
-            post_message(content, body.message.channel_id).await;
+            thread::spawn(|| async {
+                thread::sleep(time::Duration::from_secs(2));
+                post_message(content, body.message.channel_id).await;
+            });
         }
     }
     post_stamp(
