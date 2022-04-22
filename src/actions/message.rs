@@ -1,7 +1,9 @@
+use crate::commands;
+use crate::models::apis::message::{post_message, post_stamp};
 use crate::models::events::message::*;
 use crate::patterns::is_gacha;
-use crate::requests::{post_message, post_stamp};
 use http::StatusCode;
+use std::sync::Arc;
 use std::thread;
 use std::time;
 pub async fn handle_message_created(body: MessageCreated) -> StatusCode {
@@ -13,12 +15,25 @@ pub async fn handle_message_created(body: MessageCreated) -> StatusCode {
         body.message.channel_id,
         body.message.user.bot,
     );
+    let txt = std::sync::Arc::new(body.message.plain_text);
+    let cid = std::sync::Arc::new(body.message.channel_id);
     if !body.message.user.bot {
-        if is_gacha(body.message.plain_text) {
-            let content = format!(":nige_dot: https://q.trap.jp/messages/{}", body.message.id);
-            tokio::spawn(async {
+        if is_gacha(&txt) {
+            let content = Arc::new(format!(
+                ":nige_dot: https://q.trap.jp/messages/{}",
+                body.message.id
+            ));
+            let cid = cid.clone();
+            tokio::spawn(async move {
                 thread::sleep(time::Duration::from_secs(2));
-                post_message(content, body.message.channel_id).await;
+                post_message(&content.clone(), &cid).await;
+            });
+        }
+        {
+            let txt = txt.clone();
+            let cid = cid.clone();
+            tokio::spawn(async move {
+                commands::handle_command(&txt, &cid).await;
             });
         }
     }
