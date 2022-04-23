@@ -27,3 +27,12 @@ fn extract_message_id_works() {
         Some(String::from("33a865ef-cae1-4f79-a65f-a02eb9d7ca48"))
     );
 }
+#[test]
+fn extract_message_id_works2() {
+    let url = r"33a865ef-cae1-4f79-a65f-a02eb9d7ca48";
+    let s = extract_message_id(url);
+    assert_eq!(
+        s,
+        Some(String::from("33a865ef-cae1-4f79-a65f-a02eb9d7ca48"))
+    );
+}
