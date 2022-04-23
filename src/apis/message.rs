@@ -15,7 +15,7 @@ pub async fn post_message(content: &String, channel_id: &String) {
     });
     let _resp = request(&url, Method::POST, body, "post message").await;
 }
-pub async fn post_stamp(message_id: String, stamp_id: String, count: u64) {
+pub async fn post_stamp(message_id: &String, stamp_id: &String, count: u64) {
     let url = format!(
         "https://q.trap.jp/api/v3/messages/{}/stamps/{}",
         message_id, stamp_id
