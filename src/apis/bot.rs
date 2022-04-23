@@ -8,7 +8,7 @@ pub async fn join(channel_id: &String) {
     let _resp = request(&url, Method::POST, body, "join").await;
 }
 pub async fn leave(channel_id: &String) {
-    let url = format!("https://q.trap.jp/api/v3/bots/{}/actions/actions", BOT_ID);
+    let url = format!("https://q.trap.jp/api/v3/bots/{}/actions/leave", BOT_ID);
     let body = json!({ "channelId": channel_id });
-    let _resp = request(&url, Method::POST, body, "join").await;
+    let _resp = request(&url, Method::POST, body, "leave").await;
 }
