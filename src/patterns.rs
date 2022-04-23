@@ -10,7 +10,7 @@ pub fn is_gacha(text: &str) -> bool {
 }
 pub fn extract_message_id(url: &str) -> Option<String> {
     let re =
-        Regex::new(r"^(https://q.trap.jp/messages/)?(?P<message_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{)$").unwrap();
+        Regex::new(r"^(https://q.trap.jp/messages/)?(?P<message_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$").unwrap();
     if let Some(matches) = re.captures(url) {
         let message_id = &matches["message_id"];
         return Some(message_id.to_string());
