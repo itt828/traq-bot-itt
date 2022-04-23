@@ -43,12 +43,7 @@ pub async fn handle_message_created(body: MessageCreated) -> StatusCode {
         let r: usize = random();
         let stamps = get_stamps().await;
 
-        post_stamp(
-            &body.message.id,
-            &stamps.stamps[r % stamps.stamps.len()].id,
-            100,
-        )
-        .await;
+        post_stamp(&body.message.id, &stamps[r % stamps.len()].id, 100).await;
     }
     StatusCode::NO_CONTENT
 }

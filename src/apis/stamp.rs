@@ -1,8 +1,8 @@
 use super::util::request;
-use crate::models::apis::stamp::Stamps;
+use crate::models::apis::stamp::Stamp;
 use hyper::Method;
 use serde_json::json;
-pub async fn get_stamps() -> Stamps {
+pub async fn get_stamps() -> Vec<Stamp> {
     let url = format!("https://q.trap.jp/api/v3/stamps?include-unicode=true");
     let body = json!({});
     let resp = request(&url, Method::GET, body, "get stamps").await;
