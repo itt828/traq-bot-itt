@@ -2,7 +2,7 @@ use crate::apis::message::{post_message, post_stamp};
 use crate::apis::stamp::get_stamps;
 use crate::commands;
 use crate::models::events::message::*;
-use crate::patterns::is_gacha;
+use crate::patterns::{is_gacha, is_itt};
 use http::StatusCode;
 use rand::prelude::*;
 use std::sync::Arc;
@@ -39,7 +39,7 @@ pub async fn handle_message_created(body: MessageCreated) -> StatusCode {
             });
         }
     }
-    {
+    if is_itt(&txt) {
         let r: usize = random();
         let stamps = get_stamps().await;
 

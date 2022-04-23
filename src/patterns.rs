@@ -8,6 +8,14 @@ pub fn is_gacha(text: &str) -> bool {
     }
     false
 }
+pub fn is_itt(text: &str) -> bool {
+    let re = Regex::new(r"(?i)itt").unwrap();
+    if re.is_match(&text) {
+        println!("is_itt matched!");
+        return true;
+    }
+    false
+}
 pub fn extract_message_id(url: &str) -> Option<String> {
     let re =
         Regex::new(r"^(https://q.trap.jp/messages/)?(?P<message_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$").unwrap();
