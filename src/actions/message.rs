@@ -1,5 +1,5 @@
+use crate::apis::message::{post_message, post_stamp};
 use crate::commands;
-use crate::models::apis::message::{post_message, post_stamp};
 use crate::models::events::message::*;
 use crate::patterns::is_gacha;
 use http::StatusCode;

@@ -1,5 +1,6 @@
 use crate::{
-    models::apis::message::{get_message, post_message},
+    apis::bot,
+    apis::message::{get_message, post_message},
     patterns::extract_message_id,
 };
 use regex::Regex;
@@ -11,16 +12,24 @@ pub async fn handle_command(s: &String, channel_id: &String) {
         let re = Regex::new(r"@(?i)bot_itt").unwrap();
         if re.is_match(mention) {
             match s.next() {
+                Some("subscribe") => {
+                    bot::join(channel_id).await;
+                    post_message(&String::from("おいすー"), channel_id).await;
+                }
+                Some("unsubscribe") => {
+                    bot::leave(channel_id).await;
+                    post_message(&String::from("ーすいお"), channel_id).await;
+                }
                 Some("echo") => {
                     while let Some(msg) = s.next() {
-                        post_message(&String::from(msg), &channel_id).await;
+                        post_message(&String::from(msg), channel_id).await;
                     }
                 }
                 Some("cat") => {
                     while let Some(msg) = s.next() {
                         let mid = extract_message_id(msg).unwrap();
                         let got_msg = get_message(&mid).await;
-                        post_message(&got_msg, &channel_id).await;
+                        post_message(&got_msg.content, channel_id).await;
                     }
                 }
                 Some("count") => {
