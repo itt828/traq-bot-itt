@@ -1,5 +1,8 @@
 name: clone gitea
-on: [push]
+on:
+  push:
+    tags-ignore:
+      - 'v*'
 jobs:
   clone_gitea:
     runs-on: ubuntu-latest
