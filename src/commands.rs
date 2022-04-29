@@ -2,6 +2,7 @@ use crate::{
     apis::bot,
     apis::message::{get_message, post_message},
     patterns::extract_message_id,
+    utils::get_uuid,
 };
 use regex::Regex;
 use splitty::*;
@@ -30,6 +31,12 @@ pub async fn handle_command(s: &String, channel_id: &String) {
                         let mid = extract_message_id(msg).unwrap();
                         let got_msg = get_message(&mid).await;
                         post_message(&got_msg.content, channel_id).await;
+                    }
+                }
+                Some("channelid") => {
+                    if let Some(path) = s.next() {
+                        let uuid = get_uuid(path).await;
+                        post_message(&uuid, channel_id).await;
                     }
                 }
                 Some("count") => {
