@@ -5,6 +5,7 @@ mod earthquake;
 mod models;
 mod patterns;
 mod requests;
+mod utils;
 use crate::models::events::system::Ping;
 use actions::message::handle_message_created;
 use actions::system::handle_ping;
