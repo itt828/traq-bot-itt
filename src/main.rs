@@ -1,22 +1,25 @@
 mod actions;
 mod apis;
 mod commands;
+mod earthquake;
 mod models;
 mod patterns;
 mod requests;
 mod utils;
-
 use crate::models::events::system::Ping;
 use actions::message::handle_message_created;
 use actions::system::handle_ping;
 use axum::{extract::Json, routing::any, Router};
+use earthquake::earthquake;
 use http::{HeaderMap, StatusCode};
 use models::events::message::MessageCreated;
 use serde_json::{from_value, Value};
 use std::env;
 use std::net::SocketAddr;
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    earthquake().await?;
+
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
     let app = Router::new().route("/", any(handler));
     println!("serving at {}", addr);
@@ -24,6 +27,7 @@ async fn main() {
         .serve(app.into_make_service())
         .await
         .unwrap();
+    Ok(())
 }
 
 async fn handler(body: Json<Value>, headers: HeaderMap) -> StatusCode {

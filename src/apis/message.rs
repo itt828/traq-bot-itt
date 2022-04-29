@@ -7,7 +7,7 @@ pub async fn get_message(message_id: &String) -> GetMessage {
     let resp = request(&url, Method::GET, body, "get message").await;
     serde_json::from_slice(&hyper::body::to_bytes(resp.into_body()).await.unwrap()).unwrap()
 }
-pub async fn post_message(content: &String, channel_id: &String) {
+pub async fn post_message(content: &str, channel_id: &str) {
     let url = format!("https://q.trap.jp/api/v3/channels/{}/messages", channel_id);
     let body = json!({
       "content": content.to_string(),
