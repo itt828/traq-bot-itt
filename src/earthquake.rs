@@ -5,7 +5,7 @@ use std::sync::{Arc, Mutex};
 use tokio_cron_scheduler::{Job, JobScheduler};
 
 static NOIMAGE: &str = "https://s.yimg.jp/images/weather/common/noimage.gif";
-static GTIBOT: &str = "";
+static GTIBOT: &str = "0043558c-6efb-4a01-8a21-fcb171190f64";
 
 pub async fn earthquake() -> Result<(), Box<dyn std::error::Error>> {
     let last_earthquake: Arc<Mutex<Option<String>>> = Arc::new(Mutex::new(None));
@@ -16,7 +16,6 @@ pub async fn earthquake() -> Result<(), Box<dyn std::error::Error>> {
     let re = Arc::new(re);
 
     let sched = JobScheduler::new()?;
-    println!("ok");
     sched.add(Job::new_async("0/5 * * * * *", move |_uuid, _l| {
         let last_earthquake_clone = last_earthquake.clone();
         let re_clone = re.clone();
