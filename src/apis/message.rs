@@ -13,7 +13,8 @@ pub async fn post_message(content: &str, channel_id: &str) {
       "content": content.to_string(),
       "embed": true
     });
-    let _resp = request(&url, Method::POST, body, "post message").await;
+    // let _resp = request(&url, Method::POST, body, "post message").await;
+    println!("{}", body.to_string());
 }
 pub async fn post_stamp(message_id: &String, stamp_id: &String, count: u64) {
     let url = format!(
