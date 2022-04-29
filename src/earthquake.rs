@@ -30,7 +30,7 @@ pub async fn earthquake() -> Result<(), Box<dyn std::error::Error>> {
                             let time = &matches["time"];
                             let msg = format!(
                                 r"## 地震発生
-                                https://typhoon.yahoo.co.jp/weather/jp/earthquake/{}.html",
+https://typhoon.yahoo.co.jp/weather/jp/earthquake/{}.html",
                                 time
                             );
 
