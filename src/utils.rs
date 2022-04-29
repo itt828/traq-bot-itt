@@ -6,7 +6,7 @@ pub async fn get_uuid(path: &str) -> String {
     for node in path.split('/') {
         let node = node.replace("#", "");
         let p = channels
-            .public_channels
+            .public
             .iter()
             .find(|x| x.name == node && x.parent_id == cur_parent)
             .unwrap()
