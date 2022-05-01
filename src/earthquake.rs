@@ -69,7 +69,7 @@ pub fn extract_url_time(url: &str) -> Option<String> {
     )
     .unwrap();
     if let Some(matches) = &re.captures(url) {
-        Some(String::from(&matches["url"]))
+        Some(String::from(&matches["time"]))
     } else {
         None
     }
