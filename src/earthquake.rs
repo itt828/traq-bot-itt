@@ -109,7 +109,7 @@ pub async fn scrape_from_yahoo() -> Earthquake {
     };
     let time = String::from(time);
     let hypocenter = {
-        let selector = Selector::parse(r"table.yjw_table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > small:nth-child(1)").unwrap();
+        let selector = Selector::parse(r"table.yjw_table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > small:nth-child(1) > a:nth-child(1)" ).unwrap();
         doc.select(&selector)
             .next()
             .unwrap()
