@@ -1,5 +1,5 @@
-mod add_stamp;
-mod delete;
-mod edit;
-mod get;
-mod post;
+pub mod add_stamp;
+pub mod delete;
+pub mod edit;
+pub mod get;
+pub mod post;

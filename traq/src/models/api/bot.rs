@@ -1,2 +1,2 @@
-mod join;
-mod leave;
+pub mod join;
+pub mod leave;
