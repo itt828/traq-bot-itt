@@ -1,5 +1,5 @@
-mod api;
-mod event;
+pub mod api;
+pub mod event;
 #[macro_export]
 macro_rules! model_test {
     ($f:ident,$t:ty,$s:expr) => {
