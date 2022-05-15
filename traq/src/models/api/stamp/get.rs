@@ -5,18 +5,18 @@ use serde_json::json;
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct Get {
-    stamps: Vec<Stamp>,
+    pub stamps: Vec<Stamp>,
 }
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Stamp {
-    id: String,
-    name: String,
-    creator_id: String,
-    created_at: String,
-    updated_at: String,
-    file_id: String,
-    is_unicode: bool,
+    pub id: String,
+    pub name: String,
+    pub creator_id: String,
+    pub created_at: String,
+    pub updated_at: String,
+    pub file_id: String,
+    pub is_unicode: bool,
 }
 
 impl Bot {
