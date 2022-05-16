@@ -25,7 +25,7 @@ pub async fn handle_message_created(
             let bt = bot.clone();
             tokio::spawn(async move {
                 thread::sleep(time::Duration::from_secs(2));
-                bt.post_message(&cid, &content, true).await;
+                bt.post_message(&cid, &content, true).await.unwrap();
             });
         }
         {
@@ -33,7 +33,7 @@ pub async fn handle_message_created(
             let cid = body.message.channel_id.clone();
             let bt = bot.clone();
             tokio::spawn(async move {
-                commands::handle_command(&bt, &txt, &cid).await;
+                commands::handle_command(&bt, &txt, &cid).await.unwrap();
             });
         }
     }
@@ -46,7 +46,7 @@ pub async fn handle_message_created(
             &stamps.stamps[r % stamps.stamps.len()].id,
             100,
         )
-        .await;
+        .await?;
     }
     Ok(StatusCode::NO_CONTENT)
 }
