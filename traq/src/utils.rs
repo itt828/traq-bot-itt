@@ -4,7 +4,7 @@ pub async fn get_channel_uuid(bot: &Bot, path: &str) -> Result<String> {
     let mut cur_parent: Option<String> = None;
     let channels = bot.get_channels().await?;
     for node in path.split('/') {
-        let node = node.replace("#", "");
+        let node = node.replace('#', "");
         let p = channels
             .public
             .iter()

@@ -3,8 +3,8 @@ use anyhow::Result;
 use regex::Regex;
 use splitty::*;
 use traq::{bot::Bot, utils::get_channel_uuid};
-pub async fn handle_command(bot: &Bot, s: &String, channel_id: &String) -> Result<()> {
-    let mut s = split_unquoted_char(s.as_str(), ' ').unwrap_quotes(true);
+pub async fn handle_command(bot: &Bot, s: &str, channel_id: &str) -> Result<()> {
+    let mut s = split_unquoted_char(s, ' ').unwrap_quotes(true);
     if let Some(mention) = s.next() {
         let re = Regex::new(r"@(?i)bot_itt").unwrap();
         if re.is_match(mention) {
