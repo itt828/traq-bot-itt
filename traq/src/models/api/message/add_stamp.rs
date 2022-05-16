@@ -1,4 +1,5 @@
 use crate::bot::Bot;
+use crate::error::*;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -12,7 +13,7 @@ impl Bot {
         message_id: &str,
         stamp_id: &str,
         count: usize,
-    ) -> Result<AddStamp, Box<dyn std::error::Error>> {
+    ) -> Result<AddStamp> {
         let url = format!(
             "{}/messages/{}/stamps/{}",
             self.base_url, message_id, stamp_id

@@ -1,4 +1,5 @@
 use crate::bot::Bot;
+use crate::error::*;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -27,7 +28,7 @@ pub struct DmChannel {
 }
 
 impl Bot {
-    pub async fn get_channels(&self) -> Result<Get, Box<dyn std::error::Error>> {
+    pub async fn get_channels(&self) -> Result<Get> {
         let url = format!("{}/channels/", self.base_url);
         let body = json!({});
         let resp = self

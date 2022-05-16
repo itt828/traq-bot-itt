@@ -1,4 +1,5 @@
 use crate::bot::Bot;
+use crate::error::*;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -9,10 +10,7 @@ pub struct GetSubscription {
 }
 
 impl Bot {
-    pub async fn get_subscription(
-        &self,
-        channel_id: &str,
-    ) -> Result<GetSubscription, Box<dyn std::error::Error>> {
+    pub async fn get_subscription(&self, channel_id: &str) -> Result<GetSubscription> {
         let url = format!("{}/channels/{}/subscribers", self.base_url, channel_id);
         let body = json!({});
         let resp = self

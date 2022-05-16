@@ -1,4 +1,5 @@
 use crate::bot::Bot;
+use crate::error::*;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -12,7 +13,7 @@ impl Bot {
         channel_id: &str,
         on_users: &Vec<String>,
         off_users: &Vec<String>,
-    ) -> Result<EditSubscription, Box<dyn std::error::Error>> {
+    ) -> Result<EditSubscription> {
         let url = format!("{}/channels/{}/subscribers", self.base_url, channel_id);
         let body = json!({ "on": on_users,"off":off_users });
         let resp = self

@@ -1,3 +1,4 @@
+use crate::error::*;
 use reqwest::{Body, Client, Method, Response};
 use serde_json::Value;
 
@@ -12,7 +13,7 @@ impl Bot {
         url: &str,
         method: Method,
         body: Value,
-    ) -> Result<Response, Box<dyn std::error::Error>> {
+    ) -> Result<Response> {
         let auth_value = format!("Bearer {}", self.bot_access_token);
         let body_content = Body::from(body.to_string());
         let client = Client::new();

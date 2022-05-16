@@ -1,4 +1,5 @@
 use crate::bot::Bot;
+use crate::error::*;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -26,12 +27,7 @@ pub struct Stamp {
 }
 
 impl Bot {
-    pub async fn post_message(
-        &self,
-        channel_id: &str,
-        content: &str,
-        embed: bool,
-    ) -> Result<Post, Box<dyn std::error::Error>> {
+    pub async fn post_message(&self, channel_id: &str, content: &str, embed: bool) -> Result<Post> {
         let url = format!("{}/channels/{}/messages", self.base_url, channel_id);
         let body = json!({ "content": content, "embed":embed });
         let resp = self

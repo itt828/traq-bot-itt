@@ -1,4 +1,5 @@
 use crate::bot::Bot;
+use crate::error::*;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -20,10 +21,7 @@ pub struct Stamp {
 }
 
 impl Bot {
-    pub async fn get_stamp(
-        &self,
-        include_unicode: bool,
-    ) -> Result<Get, Box<dyn std::error::Error>> {
+    pub async fn get_stamp(&self, include_unicode: bool) -> Result<Get> {
         let url = format!(
             "{}/stamps?include-unicode={}",
             self.base_url, include_unicode

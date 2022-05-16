@@ -1,4 +1,5 @@
 use crate::bot::Bot;
+use crate::error::*;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -7,12 +8,7 @@ use serde_json::json;
 pub struct Edit {}
 
 impl Bot {
-    pub async fn edit_message(
-        &self,
-        message_id: &str,
-        content: &str,
-        embed: bool,
-    ) -> Result<Edit, Box<dyn std::error::Error>> {
+    pub async fn edit_message(&self, message_id: &str, content: &str, embed: bool) -> Result<Edit> {
         let url = format!("{}/messages/{}", self.base_url, message_id);
         let body = json!({ "content": content, "embed":embed });
         let resp = self

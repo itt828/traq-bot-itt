@@ -1,4 +1,5 @@
 use crate::bot::Bot;
+use crate::error::*;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -9,11 +10,7 @@ pub struct Join {
 }
 
 impl Bot {
-    pub async fn join(
-        &self,
-        bot_id: &str,
-        channel_id: &str,
-    ) -> Result<Join, Box<dyn std::error::Error>> {
+    pub async fn join(&self, bot_id: &str, channel_id: &str) -> Result<Join> {
         let url = format!("{}/bots/{}/actions/join", self.base_url, bot_id);
         let body = json!({ "channelId": channel_id });
         let resp = self
