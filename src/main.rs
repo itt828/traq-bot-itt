@@ -43,7 +43,7 @@ async fn handler(bot: std::sync::Arc<Bot>, body: Json<Value>, headers: HeaderMap
     if token == env::var("BOT_VERIFICATION_TOKEN").expect("BOT_VERIFICATION_TOKEN not found") {
         return handle_event(bot, event, body).await;
     } else {
-        return StatusCode::UNAUTHORIZED;
+        StatusCode::UNAUTHORIZED
     }
 }
 async fn handle_event(

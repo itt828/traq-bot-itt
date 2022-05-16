@@ -20,12 +20,12 @@ pub async fn handle_command(bot: &Bot, s: &String, channel_id: &String) -> Resul
                         .await;
                 }
                 Some("echo") => {
-                    while let Some(msg) = s.next() {
+                    for msg in s.by_ref() {
                         bot.post_message(&String::from(msg), channel_id, true).await;
                     }
                 }
                 Some("cat") => {
-                    while let Some(msg) = s.next() {
+                    for msg in s.by_ref() {
                         let mid = extract_message_id(msg).unwrap();
                         let got_msg = bot.get_message(mid).await?;
                         bot.post_message(channel_id, &got_msg.content, true).await;

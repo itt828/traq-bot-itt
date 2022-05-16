@@ -2,7 +2,7 @@ use regex::Regex;
 
 pub fn is_gacha(text: &str) -> bool {
     let re = Regex::new(r"catgacha").unwrap();
-    if re.is_match(&text) {
+    if re.is_match(text) {
         println!("is_gacha matched!");
         return true;
     }
@@ -10,7 +10,7 @@ pub fn is_gacha(text: &str) -> bool {
 }
 pub fn is_itt(text: &str) -> bool {
     let re = Regex::new(r"(?i)itt").unwrap();
-    if re.is_match(&text) {
+    if re.is_match(text) {
         println!("is_itt matched!");
         return true;
     }
