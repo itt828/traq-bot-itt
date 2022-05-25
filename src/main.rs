@@ -2,23 +2,36 @@ mod actions;
 mod commands;
 mod patterns;
 use crate::actions::message::handle_message_created;
+mod cron;
 use actions::system::handle_ping;
 use anyhow::Result;
 use axum::{extract::Json, routing::any, Router};
+use cron::cron;
+use earthquake_info::models::earthquake::Earthquake;
 use http::{HeaderMap, StatusCode};
 use serde_json::{from_value, Value};
 use std::env;
 use std::net::SocketAddr;
+use std::sync::Arc;
 use traq::{bot::Bot, models::event::*};
+
 #[tokio::main]
 async fn main() -> Result<()> {
-    let bot = Bot {
-        base_url: "".to_string(),
+    let bot: Bot = Bot {
+        base_url: "https://q.trap.jp/api".to_string(),
         bot_access_token: "".to_string(),
     };
-    let bot = std::sync::Arc::new(bot);
+    let bot = Arc::new(bot);
+    let last_earthquake: Arc<tokio::sync::Mutex<Option<Earthquake>>> =
+        Arc::new(tokio::sync::Mutex::new(None));
+
+    let bot_cl = bot.clone();
+    let leq = last_earthquake.clone();
+    cron(bot_cl, leq)?;
+
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
-    let app = Router::new().route("/", any(|body, headers| handler(bot, body, headers)));
+    let bot_cl2 = bot.clone();
+    let app = Router::new().route("/", any(|body, headers| handler(bot_cl2, body, headers)));
     println!("serving at {}", addr);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())

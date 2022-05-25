@@ -223,6 +223,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "earthquake-info"
+version = "0.1.0"
+dependencies = [
+ "regex",
+ "reqwest",
+ "scraper",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tokio",
+ "tokio-cron-scheduler",
+]
+
+[[package]]
 name = "ego-tree"
 version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -545,6 +559,7 @@ version = "1.2.4"
 dependencies = [
  "anyhow",
  "axum",
+ "earthquake-info",
  "http",
  "hyper",
  "hyper-tls",

@@ -20,6 +20,7 @@ tokio-cron-scheduler="0.7"
 reqwest = { version = "0.11", features = ["json"] }
 scraper = "0.13.0"
 anyhow = "1.0"
-traq ={path = "./traq"} 
+traq ={path = "./traq"}
+earthquake-info = {path = "./earthquake-info"}
 [workspace]
-members=["traq"]
+members=["traq","earthquake-info"]
