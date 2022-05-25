@@ -18,7 +18,7 @@ use traq::{bot::Bot, models::event::*};
 #[tokio::main]
 async fn main() -> Result<()> {
     let bot: Bot = Bot {
-        base_url: "https://q.trap.jp/api".to_string(),
+        base_url: "https://q.trap.jp/api/v3".to_string(),
         bot_access_token: std::env::var("BOT_ACCESS_TOKEN")?,
     };
     let bot = Arc::new(bot);
