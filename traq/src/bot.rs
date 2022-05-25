@@ -19,7 +19,7 @@ impl Bot {
         let client = Client::new();
         let req = client
             .request(method, url)
-            .header("", auth_value)
+            .header("Authorization", auth_value)
             .header("Content-Type", "application/json")
             .body(body_content);
         println!("{:?}", req);
