@@ -37,7 +37,7 @@ pub async fn handle_command(bot: &Bot, raw_s: &str, channel_id: &str) -> Result<
                     }
                 }
                 Some("shellgei") => {
-                    let re = Regex::new(r"@(?i)bot_itt\Sshellgei").unwrap();
+                    let re = Regex::new(r"@(?i)bot_itt\sshellgei").unwrap();
 
                     let req_str = re.replace(raw_s, "");
                     println!("{}", req_str);
@@ -54,7 +54,7 @@ pub async fn handle_command(bot: &Bot, raw_s: &str, channel_id: &str) -> Result<
                     let resp: Value = serde_json::from_str(&resp.text().await?)?;
                     let stdout = resp["stdout"].as_str().unwrap();
                     let stderr = resp["stderr"].as_str().unwrap();
-                    let msg = format!("### stdout\n{}, ### stderr\n{}", stdout, stderr);
+                    let msg = format!("### stdout\n{}\n### stderr\n{}", stdout, stderr);
                     bot.post_message(channel_id, &msg, false).await?;
                 }
                 Some("count") => {
