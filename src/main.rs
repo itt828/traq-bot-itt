@@ -1,27 +1,37 @@
 mod actions;
-mod apis;
 mod commands;
-mod earthquake;
-mod models;
 mod patterns;
-mod requests;
-mod utils;
-use crate::models::events::system::Ping;
-use actions::message::handle_message_created;
+use crate::actions::message::handle_message_created;
+mod cron;
 use actions::system::handle_ping;
+use anyhow::Result;
 use axum::{extract::Json, routing::any, Router};
-use earthquake::earthquake;
+use cron::cron;
+use earthquake_info::models::earthquake::Earthquake;
 use http::{HeaderMap, StatusCode};
-use models::events::message::MessageCreated;
 use serde_json::{from_value, Value};
 use std::env;
 use std::net::SocketAddr;
+use std::sync::Arc;
+use traq::{bot::Bot, models::event::*};
+
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    earthquake().await?;
+async fn main() -> Result<()> {
+    let bot: Bot = Bot {
+        base_url: "https://q.trap.jp/api".to_string(),
+        bot_access_token: std::env::var("BOT_ACCESS_TOKEN")?,
+    };
+    let bot = Arc::new(bot);
+    let last_earthquake: Arc<tokio::sync::Mutex<Option<Earthquake>>> =
+        Arc::new(tokio::sync::Mutex::new(None));
+
+    let bot_cl = bot.clone();
+    let leq = last_earthquake.clone();
+    cron(bot_cl, leq)?;
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
-    let app = Router::new().route("/", any(handler));
+    let bot_cl2 = bot.clone();
+    let app = Router::new().route("/", any(|body, headers| handler(bot_cl2, body, headers)));
     println!("serving at {}", addr);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
@@ -30,7 +40,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-async fn handler(body: Json<Value>, headers: HeaderMap) -> StatusCode {
+async fn handler(bot: std::sync::Arc<Bot>, body: Json<Value>, headers: HeaderMap) -> StatusCode {
     let token = headers["X-TRAQ-BOT-TOKEN"].to_str();
     if token.is_err() {
         println!("No X-TRAQ-BOT-TOKEN");
@@ -44,17 +54,24 @@ async fn handler(body: Json<Value>, headers: HeaderMap) -> StatusCode {
     }
     let event = event.unwrap();
     if token == env::var("BOT_VERIFICATION_TOKEN").expect("BOT_VERIFICATION_TOKEN not found") {
-        return handle_event(event, body).await;
+        return handle_event(bot, event, body).await;
     } else {
-        return StatusCode::UNAUTHORIZED;
+        StatusCode::UNAUTHORIZED
     }
 }
-async fn handle_event(event: &str, Json(body): Json<Value>) -> StatusCode {
+async fn handle_event(
+    bot: std::sync::Arc<Bot>,
+    event: &str,
+    Json(body): Json<Value>,
+) -> StatusCode {
     match event {
-        "PING" => handle_ping(from_value::<Ping>(body).unwrap()),
-        "MESSAGE_CREATED" | "DIRECT_MESSAGE_CREATED" => {
-            handle_message_created(from_value::<MessageCreated>(body).unwrap()).await
-        }
+        "PING" => handle_ping(from_value::<system::Ping>(body).unwrap()),
+        "MESSAGE_CREATED" | "DIRECT_MESSAGE_CREATED" => handle_message_created(
+            bot,
+            std::sync::Arc::new(from_value::<message::MessageCreated>(body).unwrap()),
+        )
+        .await
+        .unwrap(),
         _ => StatusCode::NOT_IMPLEMENTED,
     }
 }

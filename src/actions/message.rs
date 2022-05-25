@@ -1,14 +1,15 @@
-use crate::apis::message::{post_message, post_stamp};
-use crate::apis::stamp::get_stamps;
-use crate::commands;
-use crate::models::events::message::*;
-use crate::patterns::{is_gacha, is_itt};
+use crate::{commands, patterns::*};
+use anyhow::Result;
 use http::StatusCode;
 use rand::prelude::*;
 use std::sync::Arc;
 use std::thread;
 use std::time;
-pub async fn handle_message_created(body: MessageCreated) -> StatusCode {
+use traq::{bot::Bot, models::event::message::MessageCreated};
+pub async fn handle_message_created(
+    bot: Arc<Bot>,
+    body: Arc<MessageCreated>,
+) -> Result<StatusCode> {
     println!(
         "[{}] MESSAGE_CREATED from: {}, content: {}, channel_id: {}, bot: {}",
         body.event_time,
@@ -17,33 +18,35 @@ pub async fn handle_message_created(body: MessageCreated) -> StatusCode {
         body.message.channel_id,
         body.message.user.bot,
     );
-    let txt = std::sync::Arc::new(body.message.plain_text);
-    let cid = std::sync::Arc::new(body.message.channel_id);
     if !body.message.user.bot {
-        if is_gacha(&txt) {
-            let content = Arc::new(format!(
-                ":nige_dot: https://q.trap.jp/messages/{}",
-                body.message.id
-            ));
-            let cid = cid.clone();
+        if is_gacha(&body.message.plain_text) {
+            let content = format!(":nige_dot: https://q.trap.jp/messages/{}", body.message.id);
+            let cid = body.message.channel_id.clone();
+            let bt = bot.clone();
             tokio::spawn(async move {
                 thread::sleep(time::Duration::from_secs(2));
-                post_message(&content.clone(), &cid).await;
+                bt.post_message(&cid, &content, true).await.unwrap();
             });
         }
         {
-            let txt = txt.clone();
-            let cid = cid.clone();
+            let txt = body.message.plain_text.clone();
+            let cid = body.message.channel_id.clone();
+            let bt = bot.clone();
             tokio::spawn(async move {
-                commands::handle_command(&txt, &cid).await;
+                commands::handle_command(&bt, &txt, &cid).await.unwrap();
             });
         }
     }
-    if is_itt(&txt) {
+    if is_itt(&body.message.plain_text) {
         let r: usize = random();
-        let stamps = get_stamps().await;
+        let stamps = bot.get_stamp(true).await.unwrap();
 
-        post_stamp(&body.message.id, &stamps[r % stamps.len()].id, 100).await;
+        bot.add_stamp(
+            &body.message.id,
+            &stamps.stamps[r % stamps.stamps.len()].id,
+            100,
+        )
+        .await?;
     }
-    StatusCode::NO_CONTENT
+    Ok(StatusCode::NO_CONTENT)
 }
