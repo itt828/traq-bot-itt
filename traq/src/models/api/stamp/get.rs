@@ -27,11 +27,36 @@ impl Bot {
             self.base_url, include_unicode
         );
         let body = json!({});
-        let resp = self
-            .api_request_base(&url, Method::GET, body)
-            .await?
-            .json::<Get>()
-            .await?;
+        let resp = self.api_request_base(&url, Method::GET, body).await?;
+        println!("{:?}", resp);
+        let resp = resp.json::<Get>().await?;
         Ok(resp)
     }
+}
+#[test]
+fn a() {
+    let x = r###"
+ [
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "name": "kSD9BvOcQDlYIOF39DbQsD",
+    "creatorId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "createdAt": "2022-04-23T13:12:48.365Z",
+    "updatedAt": "2022-04-23T13:12:48.365Z",
+    "fileId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "isUnicode": true
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "name": "kSD9BvOcQDlYIOF39DbQsD",
+    "creatorId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "createdAt": "2022-04-23T13:12:48.365Z",
+    "updatedAt": "2022-04-23T13:12:48.365Z",
+    "fileId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "isUnicode": true
+  }
+]
+  "###;
+    let r = serde_json::from_str::<Get>(x);
+    assert!(r.is_ok());
 }
