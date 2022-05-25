@@ -27,15 +27,13 @@ pub struct Stamp {
 }
 
 impl Bot {
-    pub async fn post_message(&self, channel_id: &str, content: &str, embed: bool) -> Result<Post> {
+    pub async fn post_message(&self, channel_id: &str, content: &str, embed: bool) -> Result<()> {
         let url = format!("{}/channels/{}/messages", self.base_url, channel_id);
         let body = json!({ "content": content, "embed":embed });
         let resp = self.api_request_base(&url, Method::POST, body).await?;
-        let resp = resp
-            .json::<Post>()
-            .await
-            .expect("response deserializing error");
-        Ok(resp)
+        println!("{:?}", &resp.text().await?);
+        // let resp = resp.json::<Post>().await?;
+        Ok(())
     }
 }
 

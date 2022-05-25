@@ -22,7 +22,6 @@ impl Bot {
             .header("Authorization", auth_value)
             .header("Content-Type", "application/json")
             .body(body_content);
-        println!("{:?}", req);
         let resp = req.send().await?;
         Ok(resp)
     }
