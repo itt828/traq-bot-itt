@@ -39,3 +39,28 @@ impl Bot {
         Ok(resp)
     }
 }
+crate::model_test!(
+    get_test,
+    Get,
+    r#"{
+  "public": [
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "parentId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "archived": true,
+      "force": true,
+      "topic": "string",
+      "name": "YoDzyhhmLltEU",
+      "children": [
+        "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      ]
+    }
+  ],
+  "dm": [
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    }
+  ]
+}"#
+);

@@ -21,3 +21,13 @@ impl Bot {
         Ok(resp)
     }
 }
+
+crate::model_test!(
+    get_subscription_test,
+    GetSubscription,
+    r#"
+[
+  "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+]
+"#
+);

@@ -42,7 +42,7 @@ pub struct Updater {
     pub name: String,
     pub display_name: String,
     pub icon_id: String,
-    pub bot: String,
+    pub bot: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

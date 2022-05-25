@@ -21,3 +21,12 @@ impl Bot {
         Ok(resp)
     }
 }
+
+crate::model_test!(
+    leave_test,
+    Leave,
+    r#"{
+  "channelId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+}
+"#
+);

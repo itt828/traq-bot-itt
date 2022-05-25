@@ -21,7 +21,7 @@ pub struct Post {
 pub struct Stamp {
     user_id: String,
     stamp_id: String,
-    count: String,
+    count: usize,
     created_at: String,
     updated_at: String,
 }
@@ -31,11 +31,37 @@ impl Bot {
         let url = format!("{}/channels/{}/messages", self.base_url, channel_id);
         let body = json!({ "content": content, "embed":embed });
         let resp = self.api_request_base(&url, Method::POST, body).await?;
-        println!("{:?}", resp);
         let resp = resp
             .json::<Post>()
             .await
             .expect("response deserializing error");
         Ok(resp)
     }
+}
+
+#[test]
+fn post_test() {
+    let t = r##"
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "channelId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "content": "string",
+  "createdAt": "2022-05-25T05:01:58.403Z",
+  "updatedAt": "2022-05-25T05:01:58.403Z",
+  "pinned": true,
+  "stamps": [
+    {
+      "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "stampId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "count": 0,
+      "createdAt": "2022-05-25T05:01:58.403Z",
+      "updatedAt": "2022-05-25T05:01:58.403Z"
+    }
+  ],
+  "threadId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+}
+"##;
+    let r = serde_json::from_str::<Post>(t);
+    assert!(r.is_ok());
 }
