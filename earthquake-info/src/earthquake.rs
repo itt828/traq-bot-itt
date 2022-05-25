@@ -1,68 +1,30 @@
-use crate::{apis::message::post_message, models::earthquake::Earthquake};
+use crate::error::*;
+use crate::models::earthquake::Earthquake;
 use regex::Regex;
+use reqwest;
 use scraper::{Html, Selector};
-use std::{
-    ops::Deref,
-    sync::{Arc, Mutex},
-};
-use tokio_cron_scheduler::{Job, JobScheduler};
+use std::{future::Future, ops::Deref};
 
-static GTIBOT: &str = "0043558c-6efb-4a01-8a21-fcb171190f64";
-
-pub async fn earthquake() -> Result<(), Box<dyn std::error::Error>> {
-    let last_earthquake: Arc<Mutex<Option<Earthquake>>> = Arc::new(Mutex::new(None));
-
-    let sched = JobScheduler::new()?;
-    sched.add(Job::new_async("0/5 * * * * *", move |_uuid, _l| {
-        let last_earthquake_clone = last_earthquake.clone();
-        Box::pin(async move {
-            let new_earthquake = scrape_from_yahoo().await;
-            let mut last_earthquake_clone_lock = last_earthquake_clone.lock().unwrap();
-            match (&*last_earthquake_clone_lock, &new_earthquake.url_time) {
-                (Some(x), Some(y)) => match &x.url_time {
-                    Some(z) => {
-                        if z != y {
-                            *last_earthquake_clone_lock = Some(new_earthquake.clone());
-                            let msg = format!(
-                                r"## 地震発生
-- 発生時刻: **{}**
-- 震源地: **{}**
-- 最大震度: **{}**
-- マグニチュード: **{}**
-- 深さ: **{}**
-- 情報: **{}**
-https://typhoon.yahoo.co.jp/weather/jp/earthquake/{}.html",
-                                &new_earthquake.time,
-                                &new_earthquake.hypocenter,
-                                &new_earthquake.max_seismic_intensity,
-                                &new_earthquake.magnitude,
-                                &new_earthquake.depth,
-                                &new_earthquake.info,
-                                &new_earthquake.url_time.unwrap()
-                            );
-
-                            tokio::spawn(async move {
-                                post_message(&msg, GTIBOT).await;
-                            });
-                        }
-                    }
-                    None => {
-                        *last_earthquake_clone_lock = Some(new_earthquake);
-                        tokio::spawn(async {
-                            post_message("a", "a").await;
-                        });
-                    }
-                },
-                (None, _) => {
-                    *last_earthquake_clone_lock = Some(new_earthquake);
-                }
-                (Some(_), None) => {}
-            };
-        })
-    })?)?;
-    sched.start();
+pub async fn earthquake<H, Fut>(last_earthquake: &mut Option<Earthquake>, handler: H) -> Result<()>
+where
+    H: FnOnce(Earthquake) -> Fut + Send,
+    Fut: Future<Output = Result<()>>,
+{
+    let new_earthquake = scrape_from_yahoo().await;
+    match last_earthquake {
+        Some(leq) => {
+            if *leq != new_earthquake {
+                *last_earthquake = Some(new_earthquake.clone());
+                handler(new_earthquake.clone()).await?;
+            }
+        }
+        None => {
+            *last_earthquake = Some(new_earthquake.clone());
+        }
+    }
     Ok(())
 }
+
 pub fn extract_url_time(url: &str) -> Option<String> {
     let re = Regex::new(
         r"^https://weather-pctr.c.yimg.jp/t/weather-img/earthquake/(?P<time>\d{14})/.*$",
