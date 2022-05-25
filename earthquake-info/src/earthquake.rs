@@ -15,7 +15,9 @@ where
         Some(leq) => {
             if *leq != new_earthquake {
                 *last_earthquake = Some(new_earthquake.clone());
-                handler(new_earthquake.clone()).await?;
+                if new_earthquake.url_time.is_some() {
+                    handler(new_earthquake.clone()).await?;
+                }
             }
         }
         None => {
