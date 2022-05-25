@@ -17,13 +17,13 @@ impl Bot {
         let auth_value = format!("Bearer {}", self.bot_access_token);
         let body_content = Body::from(body.to_string());
         let client = Client::new();
-        let resp = client
+        let req = client
             .request(method, url)
             .header("", auth_value)
             .header("Content-Type", "application/json")
-            .body(body_content)
-            .send()
-            .await?;
+            .body(body_content);
+        println!("{:?}", req);
+        let resp = req.send().await?;
         Ok(resp)
     }
 }
