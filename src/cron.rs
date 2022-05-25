@@ -13,8 +13,26 @@ pub fn cron(
         let leq = last_earthquake.clone();
         let bot_cl = bot.clone();
         tokio::spawn(async move {
-            let f = |x| async move {
-                let x = format!("{:?}", x);
+            let f = |x: Earthquake| async move {
+                let x = format!(
+                    r"## 地震発生
+- 発生時刻: **{}**
+- 震源地: **{}**
+- 最大震度: **{}**
+- マグニチュード: **{}**
+- 深さ: **{}**
+- 情報: **{}**
+https://typhoon.yahoo.co.jp/weather/jp/earthquake/{}.html
+
+                    ",
+                    x.time,
+                    x.hypocenter,
+                    x.max_seismic_intensity,
+                    x.magnitude,
+                    x.depth,
+                    x.info,
+                    x.url_time.unwrap()
+                );
                 bot_cl
                     .post_message("0043558c-6efb-4a01-8a21-fcb171190f64", &x, true)
                     .await
