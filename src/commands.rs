@@ -1,10 +1,11 @@
 use crate::patterns::extract_message_id;
 use anyhow::Result;
 use regex::Regex;
+use serde_json::Value;
 use splitty::*;
 use traq::{bot::Bot, utils::get_channel_uuid};
-pub async fn handle_command(bot: &Bot, s: &str, channel_id: &str) -> Result<()> {
-    let mut s = split_unquoted_char(s, ' ').unwrap_quotes(true);
+pub async fn handle_command(bot: &Bot, raw_s: &str, channel_id: &str) -> Result<()> {
+    let mut s = split_unquoted_char(raw_s, ' ').unwrap_quotes(true);
     if let Some(mention) = s.next() {
         let re = Regex::new(r"@(?i)bot_itt").unwrap();
         if re.is_match(mention) {
@@ -34,6 +35,27 @@ pub async fn handle_command(bot: &Bot, s: &str, channel_id: &str) -> Result<()> 
                         let uuid = get_channel_uuid(bot, path).await?;
                         bot.post_message(channel_id, &uuid, true).await?;
                     }
+                }
+                Some("shellgei") => {
+                    let re = Regex::new(r"@(?i)bot_itt\Sshellgei").unwrap();
+
+                    let req_str = re.replace(raw_s, "");
+                    println!("{}", req_str);
+                    let client = reqwest::Client::new();
+                    let body = serde_json::json!({
+                      "code": req_str,
+                      "images": [],
+                    });
+                    let resp = client
+                        .post("https://websh.jiro4989.com/api/shellgei")
+                        .json(&body)
+                        .send()
+                        .await?;
+                    let resp: Value = serde_json::from_str(&resp.text().await?)?;
+                    let stdout = resp["stdout"].as_str().unwrap();
+                    let stderr = resp["stderr"].as_str().unwrap();
+                    let msg = format!("### stdout\n{}, ### stderr\n{}", stdout, stderr);
+                    bot.post_message(channel_id, &msg, false).await?;
                 }
                 Some("count") => {
                     match s.next() {
