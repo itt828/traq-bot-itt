@@ -34,7 +34,8 @@ impl Bot {
             .api_request_base(&url, Method::POST, body)
             .await?
             .json::<Post>()
-            .await?;
+            .await
+            .expect("response deserializing error");
         Ok(resp)
     }
 }
