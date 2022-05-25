@@ -11,18 +11,15 @@ pub async fn handle_command(bot: &Bot, s: &str, channel_id: &str) -> Result<()> 
             match s.next() {
                 Some("subscribe") => {
                     bot.join("", channel_id).await?;
-                    bot.post_message(&String::from("おいすー"), channel_id, true)
-                        .await?;
+                    bot.post_message(channel_id, "おいすー", true).await?;
                 }
                 Some("unsubscribe") => {
                     bot.leave("", channel_id).await?;
-                    bot.post_message(&String::from("ーすいお"), channel_id, true)
-                        .await?;
+                    bot.post_message(channel_id, "ーすいお", true).await?;
                 }
                 Some("echo") => {
                     for msg in s.by_ref() {
-                        bot.post_message(&String::from(msg), channel_id, true)
-                            .await?;
+                        bot.post_message(channel_id, msg, true).await?;
                     }
                 }
                 Some("cat") => {
@@ -35,7 +32,7 @@ pub async fn handle_command(bot: &Bot, s: &str, channel_id: &str) -> Result<()> 
                 Some("channelid") => {
                     if let Some(path) = s.next() {
                         let uuid = get_channel_uuid(bot, path).await?;
-                        bot.post_message(&uuid, channel_id, true).await?;
+                        bot.post_message(channel_id, &uuid, true).await?;
                     }
                 }
                 Some("count") => {
