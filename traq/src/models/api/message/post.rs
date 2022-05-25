@@ -14,7 +14,7 @@ pub struct Post {
     updated_at: String,
     pinned: bool,
     stamps: Vec<Stamp>,
-    thread_id: String,
+    thread_id: Option<String>,
 }
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -27,13 +27,12 @@ pub struct Stamp {
 }
 
 impl Bot {
-    pub async fn post_message(&self, channel_id: &str, content: &str, embed: bool) -> Result<()> {
+    pub async fn post_message(&self, channel_id: &str, content: &str, embed: bool) -> Result<Post> {
         let url = format!("{}/channels/{}/messages", self.base_url, channel_id);
         let body = json!({ "content": content, "embed":embed });
         let resp = self.api_request_base(&url, Method::POST, body).await?;
-        println!("{:?}", &resp.text().await?);
-        // let resp = resp.json::<Post>().await?;
-        Ok(())
+        let resp = resp.json::<Post>().await?;
+        Ok(resp)
     }
 }
 

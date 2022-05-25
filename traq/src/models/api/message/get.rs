@@ -14,7 +14,7 @@ pub struct Get {
     pub updated_at: String,
     pub pinned: bool,
     pub stamps: Vec<Stamp>,
-    pub thread_id: String,
+    pub thread_id: Option<String>,
 }
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
