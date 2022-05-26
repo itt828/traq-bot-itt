@@ -54,7 +54,11 @@ pub async fn handle_command(bot: &Bot, raw_s: &str, channel_id: &str) -> Result<
                     let resp: Value = serde_json::from_str(&resp.text().await?)?;
                     let stdout = resp["stdout"].as_str().unwrap();
                     let stderr = resp["stderr"].as_str().unwrap();
-                    let msg = format!("### stdout\n{}\n### stderr\n{}", stdout, stderr);
+                    let msg = if stdout != "" && stderr == "" {
+                        format!("{}", stdout)
+                    } else {
+                        format!("### stdout\n{}\n### stderr\n{}", stdout, stderr)
+                    };
                     bot.post_message(channel_id, &msg, false).await?;
                 }
                 Some("count") => {
