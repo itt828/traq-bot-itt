@@ -34,7 +34,7 @@ https://typhoon.yahoo.co.jp/weather/jp/earthquake/{}.html
                     x.url_time.unwrap()
                 );
                 bot_cl
-                    .post_message("0043558c-6efb-4a01-8a21-fcb171190f64", &x, true)
+                    .post_message("971ff17d-9bc8-443d-bf05-30afc09be379", &x, true)
                     .await
                     .unwrap();
                 Ok(())
