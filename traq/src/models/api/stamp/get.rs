@@ -28,7 +28,6 @@ impl Bot {
         );
         let body = json!({});
         let resp = self.api_request_base(&url, Method::GET, body).await?;
-        println!("{:?}", resp);
         let resp = resp.json::<Get>().await?;
         Ok(resp)
     }

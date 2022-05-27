@@ -40,7 +40,6 @@ pub async fn handle_command(bot: &Bot, raw_s: &str, channel_id: &str) -> Result<
                     let re = Regex::new(r"@(?i)bot_itt\sshellgei").unwrap();
 
                     let req_str = re.replace(raw_s, "");
-                    println!("{}", req_str);
                     let client = reqwest::Client::new();
                     let body = serde_json::json!({
                       "code": req_str,
