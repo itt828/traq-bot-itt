@@ -37,16 +37,16 @@ pub async fn handle_message_created(
             });
         }
     }
-    if is_itt(&body.message.plain_text) {
-        let r: usize = random();
-        let stamps = bot.get_stamp(true).await.unwrap();
-
-        bot.add_stamp(
-            &body.message.id,
-            &stamps.stamps[r % stamps.stamps.len()].id,
-            100,
-        )
-        .await?;
-    }
+    //    if is_itt(&body.message.plain_text) {
+    //        let r: usize = random();
+    //        let stamps = bot.get_stamp(true).await.unwrap();
+    //
+    //        bot.add_stamp(
+    //            &body.message.id,
+    //            &stamps.stamps[r % stamps.stamps.len()].id,
+    //            100,
+    //        )
+    //        .await?;
+    //    }
     Ok(StatusCode::NO_CONTENT)
 }
