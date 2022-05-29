@@ -7,7 +7,7 @@ use actions::system::handle_ping;
 use anyhow::Result;
 use axum::{extract::Json, routing::any, Router};
 use cron::cron;
-use earthquake_info::models::earthquake::Earthquake;
+use earthquake_info::models::{earthquake::Earthquake, eew::Eew};
 use http::{HeaderMap, StatusCode};
 use serde_json::{from_value, Value};
 use std::env;
@@ -25,9 +25,12 @@ async fn main() -> Result<()> {
     let last_earthquake: Arc<tokio::sync::Mutex<Option<Earthquake>>> =
         Arc::new(tokio::sync::Mutex::new(None));
 
+    let last_eew: Arc<tokio::sync::Mutex<Option<(Eew, String)>>> =
+        Arc::new(tokio::sync::Mutex::new(None));
     let bot_cl = bot.clone();
     let leq = last_earthquake.clone();
-    cron(bot_cl, leq)?;
+    let leew = last_eew.clone();
+    cron(bot_cl, leq, leew)?;
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
     let bot_cl2 = bot.clone();

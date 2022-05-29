@@ -226,6 +226,7 @@ dependencies = [
 name = "earthquake-info"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "regex",
  "reqwest",
  "scraper",
