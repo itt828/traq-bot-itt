@@ -1,2 +1,2 @@
 pub mod earthquake;
-//pub mod eew;
+pub mod eew;

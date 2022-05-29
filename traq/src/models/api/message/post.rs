@@ -6,24 +6,24 @@ use serde_json::json;
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Post {
-    id: String,
-    user_id: String,
-    channel_id: String,
-    content: String,
-    created_at: String,
-    updated_at: String,
-    pinned: bool,
-    stamps: Vec<Stamp>,
-    thread_id: Option<String>,
+    pub id: String,
+    pub user_id: String,
+    pub channel_id: String,
+    pub content: String,
+    pub created_at: String,
+    pub updated_at: String,
+    pub pinned: bool,
+    pub stamps: Vec<Stamp>,
+    pub thread_id: Option<String>,
 }
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Stamp {
-    user_id: String,
-    stamp_id: String,
-    count: usize,
-    created_at: String,
-    updated_at: String,
+    pub user_id: String,
+    pub stamp_id: String,
+    pub count: usize,
+    pub created_at: String,
+    pub updated_at: String,
 }
 
 impl Bot {

@@ -8,4 +8,6 @@ pub type Result<T> = StdResult<T, Error>;
 pub enum Error {
     #[error("")]
     JobScheduleError(#[from] JobSchedulerError),
+    #[error("reqwest error: {0}")]
+    ReqwestError(#[from] reqwest::Error),
 }
