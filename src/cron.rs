@@ -1,3 +1,4 @@
+use crate::format::eew_format;
 use anyhow::Result;
 use earthquake_info::{earthquake::earthquake, models::earthquake::Earthquake};
 use earthquake_info::{eew::get_new_eew, models::eew::Eew};
@@ -59,7 +60,7 @@ https://typhoon.yahoo.co.jp/weather/jp/earthquake/{}.html
                             let resp = bot_cl
                                 .post_message(
                                     "0043558c-6efb-4a01-8a21-fcb171190f64",
-                                    &format!("{:?}", new_eew),
+                                    &eew_format(&new_eew),
                                     false,
                                 )
                                 .await
@@ -91,6 +92,7 @@ https://typhoon.yahoo.co.jp/weather/jp/earthquake/{}.html
             } else {
                 *leew = Some((new_eew.clone(), "".to_string()));
             }
+            println!("{:?}", leew);
         });
     })?)?;
 

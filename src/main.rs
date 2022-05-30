@@ -1,5 +1,6 @@
 mod actions;
 mod commands;
+mod format;
 mod patterns;
 use crate::actions::message::handle_message_created;
 mod cron;
