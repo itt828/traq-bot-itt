@@ -4,7 +4,7 @@ use chrono::{prelude::*, Duration};
 use reqwest;
 pub async fn get_new_eew() -> Result<Eew> {
     let new_eew = {
-        let dt = Local::now() + Duration::seconds(-2);
+        let dt = Utc::now().with_timezone(&FixedOffset::east(9 * 3600)) + Duration::seconds(-2);
         let body = reqwest::get(format!(
             "http://www.kmoni.bosai.go.jp/webservice/hypo/eew/{}.json",
             dt.format("%Y%m%d%H%M%S")
