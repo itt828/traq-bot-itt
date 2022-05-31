@@ -69,7 +69,7 @@ https://typhoon.yahoo.co.jp/weather/jp/earthquake/{}.html
                         } else {
                             if v.0.report_num != new_eew.report_num {
                                 bot_cl
-                                    .edit_message(&v.1, &format!("{:?}", new_eew), false)
+                                    .edit_message(&v.1, &eew_format(&new_eew), false)
                                     .await
                                     .unwrap();
                             }
@@ -80,7 +80,7 @@ https://typhoon.yahoo.co.jp/weather/jp/earthquake/{}.html
                         let resp = bot_cl
                             .post_message(
                                 "0043558c-6efb-4a01-8a21-fcb171190f64",
-                                &format!("{:?}", new_eew),
+                                &eew_format(&new_eew),
                                 false,
                             )
                             .await
@@ -92,7 +92,6 @@ https://typhoon.yahoo.co.jp/weather/jp/earthquake/{}.html
             } else {
                 *leew = Some((new_eew.clone(), "".to_string()));
             }
-            println!("{:?}", leew);
         });
     })?)?;
 
