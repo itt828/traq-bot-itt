@@ -21,13 +21,13 @@ pub fn eew_format(eew: &Eew) -> String {
             ""
         },
         eew.region_name,
-        eew.magunitude,
         eew.calcintensity,
+        eew.magunitude,
         fix_date_format(&eew.origin_time)
     )
 }
 
 fn fix_date_format(time: &str) -> String {
     let t = NaiveDateTime::parse_from_str(time, "%Y%m%d%H%M%S").unwrap();
-    t.format("%Y/%m/%d %H:%%M:%S").to_string()
+    t.format("%Y/%m/%d %H:%M:%S").to_string()
 }
