@@ -6,6 +6,8 @@ use std::sync::Arc;
 use tokio_cron_scheduler::{Job, JobScheduler};
 use traq::bot::Bot;
 
+static GPS_EARTHQUAKE: &'static str = "971ff17d-9bc8-443d-bf05-30afc09be379";
+
 pub fn cron(
     bot: Arc<Bot>,
     last_earthquake: Arc<tokio::sync::Mutex<Option<Earthquake>>>,
@@ -38,7 +40,7 @@ https://typhoon.yahoo.co.jp/weather/jp/earthquake/{}.html
                     x.url_time.unwrap()
                 );
                 bot_cl
-                    .post_message("971ff17d-9bc8-443d-bf05-30afc09be379", &x, false)
+                    .post_message(GPS_EARTHQUAKE, &x, false)
                     .await
                     .unwrap();
                 Ok(())
@@ -58,11 +60,7 @@ https://typhoon.yahoo.co.jp/weather/jp/earthquake/{}.html
                     Some(v) => {
                         if v.0.report_id != new_eew.report_id {
                             let resp = bot_cl
-                                .post_message(
-                                    "0043558c-6efb-4a01-8a21-fcb171190f64",
-                                    &eew_format(&new_eew),
-                                    false,
-                                )
+                                .post_message(GPS_EARTHQUAKE, &eew_format(&new_eew), false)
                                 .await
                                 .unwrap();
                             last_msg_id = resp.id.clone();
@@ -78,11 +76,7 @@ https://typhoon.yahoo.co.jp/weather/jp/earthquake/{}.html
                     }
                     None => {
                         let resp = bot_cl
-                            .post_message(
-                                "0043558c-6efb-4a01-8a21-fcb171190f64",
-                                &eew_format(&new_eew),
-                                false,
-                            )
+                            .post_message(GPS_EARTHQUAKE, &eew_format(&new_eew), false)
                             .await
                             .unwrap();
                         last_msg_id = resp.id.clone();
