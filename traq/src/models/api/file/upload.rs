@@ -1,6 +1,6 @@
 use crate::bot::Bot;
 use crate::error::*;
-use reqwest::{Client, Method};
+use reqwest::{multipart::Part, Client, Method};
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -26,17 +26,17 @@ pub struct ThumbnailInfo {
 }
 
 impl Bot {
-    pub async fn upload(&self, file: &str, channel_id: &str) -> Result<Upload> {
+    pub async fn upload(&self, file: Vec<u8>, channel_id: &str) -> Result<Upload> {
         let auth_value = format!("Bearer {}", self.bot_access_token);
 
-        let file = file.to_string();
         let channel_id = channel_id.to_string();
 
         let url = format!("{}/files", self.base_url);
         let client = Client::new();
+        let file = Part::bytes(file).file_name("shellgei");
         let form = reqwest::multipart::Form::new()
-            .text("file", file)
-            .text("channelId", channel_id);
+            .text("channelId", channel_id)
+            .part("file", file);
         let resp = client
             .request(Method::POST, url)
             .header("Authorization", auth_value)
