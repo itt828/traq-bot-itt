@@ -65,7 +65,9 @@ pub async fn handle_command(bot: &Bot, raw_s: &str, channel_id: &str) -> Result<
                     //                        })
                     //                        .collect::<Vec<_>>();
 
-                    let img = resp["images"].as_array().unwrap()[0].as_str().unwrap();
+                    let img = resp["images"].as_array().unwrap()[0]["image"]
+                        .as_str()
+                        .unwrap();
                     let raw_image = base64::decode(img).unwrap();
                     let image_id = bot
                         .upload(std::str::from_utf8(&raw_image[..]).unwrap(), channel_id)
