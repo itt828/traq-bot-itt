@@ -70,13 +70,7 @@ pub async fn handle_command(bot: &Bot, raw_s: &str, channel_id: &str) -> Result<
                         .unwrap();
                     let raw_image = base64::decode(img).unwrap();
                     let image_id;
-                    unsafe {
-                        image_id = bot
-                            .upload(std::str::from_utf8_unchecked(&raw_image[..]), channel_id)
-                            .await
-                            .unwrap()
-                            .id;
-                    }
+                    image_id = bot.upload(raw_image, channel_id).await.unwrap().id;
                     let image_url = format!("https://q.trap.jp/files/{}", image_id);
 
                     let msg = if stdout != "" && stderr == "" {
