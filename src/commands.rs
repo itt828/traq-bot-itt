@@ -65,12 +65,27 @@ pub async fn handle_command(bot: &Bot, raw_s: &str, channel_id: &str) -> Result<
                     //                        })
                     //                        .collect::<Vec<_>>();
 
-                    let img = resp["images"].as_array().unwrap()[0]["image"]
-                        .as_str()
-                        .unwrap();
+                    let img = &resp["images"].as_array().unwrap()[0];
+                    let fmt = img["format"].as_str().unwrap();
+                    let img = img["image"].as_str().unwrap();
+                    let fmt = {
+                        match fmt {
+                            "jpe" | "jpg" => "jpeg",
+                            x => x,
+                        }
+                    };
                     let raw_image = base64::decode(img).unwrap();
                     let image_id;
-                    image_id = bot.upload(raw_image, channel_id).await.unwrap().id;
+                    image_id = bot
+                        .upload(
+                            raw_image,
+                            &format!("image/{}", fmt),
+                            &format!("shellgei.{}", fmt),
+                            channel_id,
+                        )
+                        .await
+                        .unwrap()
+                        .id;
                     let image_url = format!("https://q.trap.jp/files/{}", image_id);
 
                     let msg = if stdout != "" && stderr == "" {

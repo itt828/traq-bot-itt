@@ -26,24 +26,33 @@ pub struct ThumbnailInfo {
 }
 
 impl Bot {
-    pub async fn upload(&self, file: Vec<u8>, channel_id: &str) -> Result<Upload> {
+    pub async fn upload(
+        &self,
+        file: Vec<u8>,
+        mime_type: &str,
+        file_name: &str,
+        channel_id: &str,
+    ) -> Result<Upload> {
         let auth_value = format!("Bearer {}", self.bot_access_token);
 
         let channel_id = channel_id.to_string();
 
         let url = format!("{}/files", self.base_url);
         let client = Client::new();
-        let file = Part::bytes(file).file_name("shellgei");
+        let file = Part::bytes(file)
+            .file_name(file_name.to_string())
+            .mime_str(mime_type)?;
         let form = reqwest::multipart::Form::new()
             .text("channelId", channel_id)
             .part("file", file);
-        let resp = client
+        let req = client
             .request(Method::POST, url)
             .header("Authorization", auth_value)
             .header("Content-Type", "multipart/form-data")
-            .multipart(form)
-            .send()
-            .await?;
+            .multipart(form);
+        println!("{:?}", req);
+
+        let resp = req.send().await?;
         println!("{:?}", resp);
         let resp = resp.json::<Upload>().await?;
         println!("{:?}", resp);
