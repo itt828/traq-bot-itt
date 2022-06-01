@@ -46,6 +46,7 @@ impl Bot {
             .await?
             .json::<Upload>()
             .await?;
+        println!("{:?}", resp);
         Ok(resp)
     }
 }
