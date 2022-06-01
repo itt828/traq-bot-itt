@@ -43,9 +43,9 @@ impl Bot {
             .header("Content-Type", "multipart/form-data")
             .multipart(form)
             .send()
-            .await?
-            .json::<Upload>()
             .await?;
+        println!("{:?}", resp);
+        let resp = resp.json::<Upload>().await?;
         println!("{:?}", resp);
         Ok(resp)
     }
