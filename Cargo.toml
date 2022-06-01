@@ -23,5 +23,6 @@ anyhow = "1.0"
 chrono = "0.4"
 traq ={path = "./traq"}
 earthquake-info = {path = "./earthquake-info"}
+base64 = "0.13.0"
 [workspace]
 members=["traq","earthquake-info"]

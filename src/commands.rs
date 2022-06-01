@@ -53,10 +53,27 @@ pub async fn handle_command(bot: &Bot, raw_s: &str, channel_id: &str) -> Result<
                     let resp: Value = serde_json::from_str(&resp.text().await?)?;
                     let stdout = resp["stdout"].as_str().unwrap();
                     let stderr = resp["stderr"].as_str().unwrap();
+                    let imgs = resp["images"]
+                        .as_array()
+                        .unwrap()
+                        .iter()
+                        .map(|x| {
+                            let s = x.as_str().unwrap();
+                            let raw_image = base64::decode(s).unwrap();
+                            let image_id = bot.upload(raw_image, channel_id).await.unwrap().id;
+                            format!("https://q.trap.jp/files/{}", image_id)
+                        })
+                        .collect::<Vec<_>>();
+
                     let msg = if stdout != "" && stderr == "" {
-                        format!("{}", stdout)
+                        format!("{}\n{}", stdout, imgs.join("\n"))
                     } else {
-                        format!("### stdout\n{}\n### stderr\n{}", stdout, stderr)
+                        format!(
+                            "### stdout\n{}\n### stderr\n{}\n{}",
+                            stdout,
+                            stderr,
+                            imgs.join("\n")
+                        )
                     };
                     bot.post_message(channel_id, &msg, false).await?;
                 }
