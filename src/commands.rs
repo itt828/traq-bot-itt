@@ -53,26 +53,33 @@ pub async fn handle_command(bot: &Bot, raw_s: &str, channel_id: &str) -> Result<
                     let resp: Value = serde_json::from_str(&resp.text().await?)?;
                     let stdout = resp["stdout"].as_str().unwrap();
                     let stderr = resp["stderr"].as_str().unwrap();
-                    let imgs = resp["images"]
-                        .as_array()
+                    //                    let imgs = resp["images"]
+                    //                        .as_array()
+                    //                        .unwrap()
+                    //                        .iter()
+                    //                        .map(|x| async {
+                    //                            let s = x.as_str().unwrap();
+                    //                            let raw_image = base64::decode(s).unwrap();
+                    //                            let image_id = bot.upload(raw_image, channel_id).await.unwrap().id;
+                    //                            format!("https://q.trap.jp/files/{}", image_id)
+                    //                        })
+                    //                        .collect::<Vec<_>>();
+
+                    let img = resp["images"].as_array().unwrap()[0].as_str().unwrap();
+                    let raw_image = base64::decode(img).unwrap();
+                    let image_id = bot
+                        .upload(std::str::from_utf8(&raw_image[..]).unwrap(), channel_id)
+                        .await
                         .unwrap()
-                        .iter()
-                        .map(|x| {
-                            let s = x.as_str().unwrap();
-                            let raw_image = base64::decode(s).unwrap();
-                            let image_id = bot.upload(raw_image, channel_id).await.unwrap().id;
-                            format!("https://q.trap.jp/files/{}", image_id)
-                        })
-                        .collect::<Vec<_>>();
+                        .id;
+                    let image_url = format!("https://q.trap.jp/files/{}", image_id);
 
                     let msg = if stdout != "" && stderr == "" {
-                        format!("{}\n{}", stdout, imgs.join("\n"))
+                        format!("{}\n{}", stdout, image_url)
                     } else {
                         format!(
                             "### stdout\n{}\n### stderr\n{}\n{}",
-                            stdout,
-                            stderr,
-                            imgs.join("\n")
+                            stdout, stderr, image_url
                         )
                     };
                     bot.post_message(channel_id, &msg, false).await?;

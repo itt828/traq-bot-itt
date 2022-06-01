@@ -29,6 +29,9 @@ impl Bot {
     pub async fn upload(&self, file: &str, channel_id: &str) -> Result<Upload> {
         let auth_value = format!("Bearer {}", self.bot_access_token);
 
+        let file = file.to_string();
+        let channel_id = channel_id.to_string();
+
         let url = format!("{}/files", self.base_url);
         let client = Client::new();
         let form = reqwest::multipart::Form::new()
@@ -38,7 +41,7 @@ impl Bot {
             .request(Method::POST, url)
             .header("Authorization", auth_value)
             .header("Content-Type", "multipart/form-data")
-            .multipart(&form)
+            .multipart(form)
             .send()
             .await?
             .json::<Upload>()
