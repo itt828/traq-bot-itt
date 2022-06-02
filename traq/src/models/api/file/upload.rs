@@ -19,6 +19,7 @@ pub struct Upload {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ThumbnailInfo {
+    #[serde(rename = "type")]
     pub thumbnail_type: String,
     pub mime: String,
     pub width: usize,
