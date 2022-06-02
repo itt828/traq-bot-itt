@@ -48,7 +48,6 @@ impl Bot {
         let req = client
             .request(Method::POST, url)
             .header("Authorization", auth_value)
-            .header("Content-Type", "multipart/form-data")
             .multipart(form);
         println!("{:?}", req);
 
