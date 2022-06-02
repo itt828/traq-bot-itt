@@ -65,38 +65,47 @@ pub async fn handle_command(bot: &Bot, raw_s: &str, channel_id: &str) -> Result<
                     //                        })
                     //                        .collect::<Vec<_>>();
 
-                    let img = &resp["images"].as_array().unwrap()[0];
-                    let fmt = img["format"].as_str().unwrap();
-                    let img = img["image"].as_str().unwrap();
-                    let fmt = {
-                        match fmt {
-                            "jpe" | "jpg" => "jpeg",
-                            x => x,
-                        }
-                    };
-                    let raw_image = base64::decode(img).unwrap();
-                    let image_id;
-                    image_id = bot
-                        .upload(
-                            raw_image,
-                            &format!("image/{}", fmt),
-                            &format!("shellgei.{}", fmt),
-                            channel_id,
-                        )
-                        .await
-                        .unwrap()
-                        .id;
-                    let image_url = format!("https://q.trap.jp/files/{}", image_id);
-
-                    let msg = if stdout != "" && stderr == "" {
-                        format!("{}\n{}", stdout, image_url)
+                    let imgs = resp["images"].as_array().unwrap();
+                    if imgs.len() >= 1 {
+                        let img = &imgs[0];
+                        let fmt = img["format"].as_str().unwrap();
+                        let img = img["image"].as_str().unwrap();
+                        let fmt = {
+                            match fmt {
+                                "jpe" | "jpg" => "jpeg",
+                                x => x,
+                            }
+                        };
+                        let raw_image = base64::decode(img).unwrap();
+                        let image_id;
+                        image_id = bot
+                            .upload(
+                                raw_image,
+                                &format!("image/{}", fmt),
+                                &format!("shellgei.{}", fmt),
+                                channel_id,
+                            )
+                            .await
+                            .unwrap()
+                            .id;
+                        let image_url = format!("https://q.trap.jp/files/{}", image_id);
+                        let msg = if stdout != "" {
+                            format!("{}\n{}", stdout, image_url)
+                        } else {
+                            format!(
+                                "### stdout\n{}\n### stderr\n{}\n{}",
+                                stdout, stderr, image_url
+                            )
+                        };
+                        bot.post_message(channel_id, &msg, false).await?;
                     } else {
-                        format!(
-                            "### stdout\n{}\n### stderr\n{}\n{}",
-                            stdout, stderr, image_url
-                        )
-                    };
-                    bot.post_message(channel_id, &msg, false).await?;
+                        let msg = if stdout != "" && stderr == "" {
+                            format!("{}", stdout)
+                        } else {
+                            format!("### stdout\n{}\n### stderr\n{}", stdout, stderr)
+                        };
+                        bot.post_message(channel_id, &msg, false).await?;
+                    }
                 }
                 Some("count") => {
                     match s.next() {
