@@ -1,0 +1,40 @@
+### api
+- bot
+  - ✅join
+  - ✅leave
+- channel
+  - ✅edit_subscription
+  - ✅edit_topic
+  - ✅get_subscription
+  - ✅get
+- file
+  - delete
+  - download
+  - upload !
+- group
+  - create
+  - delete
+  - edit
+  - get
+- message
+  - ✅add_stamp 
+  - create_pin
+  - delete_pin
+  - ✅delete 
+  - ✅edit 
+  - ✅get 
+  - ✅post
+  - remove_stamp
+- stamp
+  - ✅get 
+- user
+  - me
+    - change_icon
+    - edit
+    - get_stamp_history
+    - get
+  - edit_tag
+  - get_tag
+  - get
+
+  
