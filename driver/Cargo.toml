@@ -24,3 +24,5 @@ chrono = "0.4"
 traq ={path = "../traq"}
 earthquake-info = {path = "../earthquake-info"}
 base64 = "0.13.0"
+
+domain = {path = "../domain"}
