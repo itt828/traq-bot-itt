@@ -3,6 +3,15 @@
 version = 3
 
 [[package]]
+name = "adapter"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "domain",
+ "ulid",
+]
+
+[[package]]
 name = "aho-corasick"
 version = "0.7.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -25,6 +34,18 @@ name = "anyhow"
 version = "1.0.62"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1485d4d2cc45e7b201ee3767015c96faa5904387c9d87c6efdd0fb511f12d305"
+
+[[package]]
+name = "application"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "derive-new",
+ "domain",
+ "ulid",
+ "url",
+]
 
 [[package]]
 name = "async-trait"
@@ -205,6 +226,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "derive-new"
+version = "0.5.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3418329ca0ad70234b9735dc4ceed10af4df60eff9c8e7b06cb5e520d92c3535"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "derive_more"
 version = "0.99.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -220,12 +252,20 @@ dependencies = [
 [[package]]
 name = "domain"
 version = "0.1.0"
+dependencies = [
+ "chrono",
+ "derive-new",
+ "ulid",
+ "url",
+]
 
 [[package]]
 name = "driver"
 version = "0.1.0"
 dependencies = [
+ "adapter",
  "anyhow",
+ "application",
  "axum",
  "base64",
  "chrono",
@@ -1687,6 +1727,15 @@ name = "try-lock"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "59547bce71d9c38b83d9c0e92b6066c4253371f15005def0c30d9657f50c7642"
+
+[[package]]
+name = "ulid"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "13a3aaa69b04e5b66cc27309710a569ea23593612387d67daaf102e73aa974fd"
+dependencies = [
+ "rand 0.8.5",
+]
 
 [[package]]
 name = "unicase"

@@ -1,8 +1,9 @@
+use chrono::{DateTime, Local};
 #[derive(Debug)]
-struct IcalEvent {
-    title: String,
-    start_time: String,
-    end_time: String,
-    calendar_name: String,
-    summary: String,
+pub struct IcalEvent {
+    pub title: String,
+    pub start_time: DateTime<Local>,
+    pub end_time: DateTime<Local>,
+    pub calendar_name: String,
+    pub summary: String,
 }

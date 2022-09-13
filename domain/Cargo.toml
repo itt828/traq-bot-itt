@@ -6,3 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+ulid = "1.0.0"
+derive-new = "0.5.9"
+chrono = "0.4"
+url = "2.2.2"

@@ -1,7 +1,7 @@
 [workspace]
 members = [
 #  "adapter",
-#  "application",
+ "application",
   "domain",
   "driver",
   "traq",

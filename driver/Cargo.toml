@@ -26,3 +26,5 @@ earthquake-info = {path = "../earthquake-info"}
 base64 = "0.13.0"
 
 domain = {path = "../domain"}
+application = {path = "../application"}
+adapter = {path = "../adapter"}
