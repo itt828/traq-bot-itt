@@ -1,14 +1,26 @@
-use crate::repository::ical::IcalRepository;
 use anyhow::Result;
+use application::repository::ical::IcalRepository;
+use async_trait::async_trait;
 
 pub struct IcalSqlHandler;
 
+#[async_trait]
 impl IcalRepository for IcalSqlHandler {
-    fn create(ical: domain::ical::ical::Ical) -> Result<()> {}
-    fn delete(id: String) -> anyhow::Result<()> {}
-    fn find_by_id(id: ulid::Ulid) -> anyhow::Result<Vec<domain::ical::ical::Ical>> {}
-    fn find_by_owner(owner: String) -> anyhow::Result<domain::ical::ical::Ical> {}
-    fn update(ical: domain::ical::ical::Ical) -> anyhow::Result<()> {}
+    async fn find(
+        &self,
+        arg: &application::repository::ical::FindArgs,
+    ) -> Result<Vec<domain::ical::ical::Ical>> {
+        todo!()
+    }
+    async fn create(&self, arg: application::repository::ical::CreateArgs) -> Result<()> {
+        todo!()
+    }
+    async fn update(&self, arg: application::repository::ical::UpdateArgs) -> Result<()> {
+        todo!()
+    }
+    async fn delete(&self, id: ulid::Ulid) -> Result<()> {
+        todo!()
+    }
 }
 
 impl IcalSqlHandler {
