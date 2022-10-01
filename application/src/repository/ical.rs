@@ -1,13 +1,16 @@
 use anyhow::Result;
+use async_trait::async_trait;
 use chrono::Duration;
 use domain::ical::ical::Ical;
 use ulid::Ulid;
 use url::Url;
-pub trait IcalRepository {
-    fn create(&self, arg: CreateArgs) -> Result<()>;
-    fn update(&self, arg: UpdateArgs) -> Result<()>;
-    fn find(&self, arg: &FindArgs) -> Result<Vec<Ical>>;
-    fn delete(&self, id: Ulid) -> Result<()>;
+
+#[async_trait]
+pub trait IcalRepository: Send + Sync + 'static {
+    async fn create(&self, arg: CreateArgs) -> Result<()>;
+    async fn update(&self, arg: UpdateArgs) -> Result<()>;
+    async fn find(&self, arg: &FindArgs) -> Result<Vec<Ical>>;
+    async fn delete(&self, id: Ulid) -> Result<()>;
 }
 
 pub struct CreateArgs {
