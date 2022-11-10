@@ -28,6 +28,15 @@ pub async fn handle_message_created(
                 bt.post_message(&cid, &content, true).await.unwrap();
             });
         }
+        if is_cutgacha(&body.message.plain_text) {
+            let content = ":shortcat";
+            let cid = body.message.channel_id.clone();
+            let bt = bot.clone();
+            tokio::spawn(async move {
+                thread::sleep(time::Duration::from_secs(1));
+                bt.post_message(&cid, &content, true).await.unwrap();
+            });
+        }
         {
             let txt = body.message.plain_text.clone();
             let cid = body.message.channel_id.clone();

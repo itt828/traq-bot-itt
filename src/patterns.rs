@@ -7,6 +7,13 @@ pub fn is_gacha(text: &str) -> bool {
     }
     false
 }
+pub fn is_cutgacha(text: &str) -> bool {
+    let re = Regex::new(r"cutgacha").unwrap();
+    if re.is_match(text) {
+        return true;
+    }
+    false
+}
 pub fn is_itt(text: &str) -> bool {
     let re = Regex::new(r"(?i)itt").unwrap();
     if re.is_match(text) {
