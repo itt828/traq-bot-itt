@@ -29,7 +29,7 @@ pub async fn handle_message_created(
             });
         }
         if is_cutgacha(&body.message.plain_text) {
-            let content = ":shortcat";
+            let content = ":shortcat:";
             let cid = body.message.channel_id.clone();
             let bt = bot.clone();
             tokio::spawn(async move {
