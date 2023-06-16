@@ -1,7 +1,6 @@
 mod command;
 mod handler;
 use crate::handler::{direct_message_created_handler, message_created_handler};
-use command::{command_parser, exec_command, make_error_string, split_words, Hoge};
 use traq::apis::configuration::Configuration;
 use traq_ws_bot::bot::builder;
 
@@ -28,16 +27,3 @@ async fn main() -> anyhow::Result<()> {
         .build();
     bot.start().await
 }
-
-// async fn main() {
-//     aa(command_parser(split_words("@bot_itt join --help")).await);
-// }
-// fn aa(a: Result<Hoge, clap::error::Error>) {
-//     match a {
-//         Ok(x) => println!("{:#?}", x),
-//         Err(e) => {
-//             let error_string = make_error_string(e);
-//             println!("{}", error_string);
-//         }
-//     }
-// }

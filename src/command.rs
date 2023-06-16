@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use clap::{CommandFactory, Parser, Subcommand};
+use clap::{Parser, Subcommand};
 use regex;
 use shlex;
 use strip_ansi_escapes;

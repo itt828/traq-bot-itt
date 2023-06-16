@@ -2,9 +2,7 @@ use std::{str::FromStr, sync::Arc};
 
 use clap::Args;
 use traq::{
-    apis::{
-        bot_api::let_bot_join_channel, channel_api::post_message, configuration::Configuration,
-    },
+    apis::{bot_api::let_bot_join_channel, channel_api::post_message},
     models::{PostBotActionJoinRequest, PostMessageRequest},
 };
 use traq_ws_bot::events::common::Message;
