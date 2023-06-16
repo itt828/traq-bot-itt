@@ -1,32 +1,33 @@
-use clap::{CommandFactory, Parser};
+use std::sync::Arc;
+
+use clap::{CommandFactory, Parser, Subcommand};
 use regex;
 use shlex;
 use strip_ansi_escapes;
-use traq_ws_bot::events::payload;
+use traq::{apis::message_api::post_message, models::PostMessageRequest};
+use traq_ws_bot::events::common::Message;
+
+use crate::Resource;
+
+use self::join::Join;
+
+pub mod join;
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
-struct Hoge {
-    /// Name of the person to greet
-    #[arg(short, long)]
-    name: Option<String>,
-
-    /// Number of times to greet
-    #[arg(short, long, default_value_t = 1)]
-    count: u8,
+pub struct Hoge {
+    #[clap(subcommand)]
+    subcommand: SubCommands,
 }
 
-fn command_parser(input_args: Vec<String>) {
-    let parsed = Hoge::parse_from(input_args);
-    println!("{:?}", parsed);
-    let cmd = <Hoge as CommandFactory>::command();
-    let help_msg = cmd.disable_colored_help(true).render_help();
-    println!(
-        "{}",
-        String::from_utf8(strip_ansi_escapes::strip(&help_msg.ansi().to_string()).unwrap())
-            .unwrap()
-    );
+#[derive(Debug, Subcommand)]
+pub enum SubCommands {
+    Join(Join),
+}
+
+pub async fn command_parser(input_args: Vec<String>) -> Result<Hoge, clap::error::Error> {
+    Hoge::try_parse_from(input_args)
 }
 
 fn is_command_prefix(first_word: String) -> bool {
@@ -34,11 +35,37 @@ fn is_command_prefix(first_word: String) -> bool {
     prefix.is_match(&first_word)
 }
 
-pub fn exec_command(payload: payload::MessageCreated) {
-    let msg = payload.message.plain_text;
-    let arg_vec = shlex::split(&msg).unwrap();
+pub fn split_words(msg: &str) -> Vec<String> {
+    shlex::split(msg).unwrap()
+}
+
+pub fn make_error_string(error: clap::Error) -> String {
+    let error_string =
+        String::from_utf8(strip_ansi_escapes::strip(&error.render().to_string()).unwrap()).unwrap();
+    error_string
+}
+
+pub async fn exec_command(message: Message, resource: Arc<Resource>) {
+    let msg = message.plain_text.clone();
+    let arg_vec = split_words(&msg);
+
     if is_command_prefix(arg_vec[0].clone()) {
-        command_parser(arg_vec);
+        let parsed = command_parser(arg_vec).await;
+        match parsed {
+            Ok(x) => println!("{:#?}", x),
+            Err(e) => {
+                let error_string = make_error_string(e);
+                let _ = post_message(
+                    &resource.configuration,
+                    &message.channel_id,
+                    Some(PostMessageRequest {
+                        content: format!("```\n{}\n```", error_string),
+                        embed: None,
+                    }),
+                )
+                .await;
+            }
+        }
     }
 }
 
