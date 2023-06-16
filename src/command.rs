@@ -41,7 +41,7 @@ pub async fn command_parser(input_args: Vec<String>) -> Result<Hoge, clap::error
 }
 
 fn is_command_prefix(first_word: String) -> bool {
-    let prefix = regex::Regex::new(r"^(?i)@bot_itt").unwrap();
+    let prefix = regex::Regex::new(r"^(?i)(@bot_itt|cmd)").unwrap();
     prefix.is_match(&first_word)
 }
 
@@ -90,5 +90,7 @@ mod tests {
         assert_eq!(is_command_prefix("@botitt hoge".to_string()), false);
         assert_eq!(is_command_prefix("bot_itt hoge".to_string()), false);
         assert_eq!(is_command_prefix("hoge".to_string()), false);
+        assert_eq!(is_command_prefix("cmd".to_string()), true);
+        assert_eq!(is_command_prefix("cMd".to_string()), true);
     }
 }
