@@ -7,6 +7,7 @@ use traq_ws_bot::bot::builder;
 
 pub struct Resource {
     configuration: Configuration,
+    bot_id: String,
 }
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -17,6 +18,7 @@ async fn main() -> anyhow::Result<()> {
     };
     let resource = Resource {
         configuration: config,
+        bot_id: String::from("78d4d314-7b1d-4486-bbbf-65759fe77033"),
     };
 
     let bot = builder(bot_access_token)
@@ -28,9 +30,7 @@ async fn main() -> anyhow::Result<()> {
 }
 
 // async fn main() {
-//     aa(command_parser(split_words("@bot_itt join")).await);
-//     aa(command_parser(split_words("@bot_itt f")).await);
-//     aa(command_parser(split_words("@bot_itt help")).await);
+//     aa(command_parser(split_words("@bot_itt join --help")).await);
 // }
 // fn aa(a: Result<Hoge, clap::error::Error>) {
 //     match a {

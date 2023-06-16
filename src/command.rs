@@ -26,6 +26,16 @@ pub enum SubCommands {
     Join(Join),
 }
 
+pub async fn handle_subcommands(
+    subcommands: SubCommands,
+    message: Message,
+    resource: Arc<Resource>,
+) {
+    match subcommands {
+        SubCommands::Join(x) => join::handle_join(x, message, resource).await,
+    }
+}
+
 pub async fn command_parser(input_args: Vec<String>) -> Result<Hoge, clap::error::Error> {
     Hoge::try_parse_from(input_args)
 }
@@ -52,7 +62,7 @@ pub async fn exec_command(message: Message, resource: Arc<Resource>) {
     if is_command_prefix(arg_vec[0].clone()) {
         let parsed = command_parser(arg_vec).await;
         match parsed {
-            Ok(x) => println!("{:#?}", x),
+            Ok(x) => handle_subcommands(x.subcommand, message, resource).await,
             Err(e) => {
                 let error_string = make_error_string(e);
                 let _ = post_message(

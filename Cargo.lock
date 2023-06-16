@@ -782,6 +782,7 @@ dependencies = [
  "tokio",
  "traq",
  "traq-ws-bot",
+ "uuid",
 ]
 
 [[package]]
