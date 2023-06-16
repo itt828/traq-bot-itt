@@ -1,3 +1,4 @@
+mod command;
 mod handler;
 use crate::handler::{direct_message_created_handler, message_created_handler};
 use traq::apis::configuration::Configuration;
