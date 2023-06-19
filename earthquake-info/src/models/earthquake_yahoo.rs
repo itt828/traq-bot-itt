@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct Earthquake {
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct EarthquakeYahoo {
     pub url_time: Option<String>,
     pub time: String,
     pub hypocenter: String,
@@ -10,3 +10,11 @@ pub struct Earthquake {
     pub depth: String,
     pub info: String,
 }
+
+impl PartialEq for EarthquakeYahoo {
+    fn eq(&self, other: &Self) -> bool {
+        self.time == other.time
+    }
+}
+
+impl Eq for EarthquakeYahoo {}

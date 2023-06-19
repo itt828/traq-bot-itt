@@ -17,5 +17,7 @@ shlex = "1.1.0"
 strip-ansi-escapes = "0.1.1"
 regex = "1.8.4"
 uuid = "1.3.4"
+earthquake-info = { path = "./earthquake-info" }
+tokio-cron-scheduler = "0.9.4"
 [workspace]
-# members=["earthquake-info"]
+members = ["earthquake-info"]

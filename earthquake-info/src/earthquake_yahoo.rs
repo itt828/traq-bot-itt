@@ -1,11 +1,11 @@
 use crate::error::*;
-use crate::models::earthquake::Earthquake;
+use crate::models::earthquake_yahoo::EarthquakeYahoo;
 use regex::Regex;
 use reqwest;
 use scraper::{Html, Selector};
 use std::ops::Deref;
 
-pub async fn get_current_earthquake() -> Result<Earthquake> {
+pub async fn get_current_earthquake() -> Result<EarthquakeYahoo> {
     let new_earthquake = scrape_from_yahoo().await;
     Ok(new_earthquake)
 }
@@ -22,7 +22,7 @@ pub fn extract_url_time(url: &str) -> Option<String> {
     }
 }
 //return url of the latest earthquake image
-pub async fn scrape_from_yahoo() -> Earthquake {
+pub async fn scrape_from_yahoo() -> EarthquakeYahoo {
     let resp = reqwest::get("https://typhoon.yahoo.co.jp/weather/jp/earthquake/")
         .await
         .unwrap()
@@ -125,7 +125,7 @@ pub async fn scrape_from_yahoo() -> Earthquake {
             .trim()
     };
     let info = String::from(info);
-    Earthquake {
+    EarthquakeYahoo {
         url_time,
         time,
         hypocenter,
