@@ -4,9 +4,9 @@ use earthquake_info::{
 use std::sync::{Arc, Mutex};
 use tokio_cron_scheduler::Job;
 
-pub async fn earthquake_info_cron() -> Job {
+pub async fn earthquake_info_cron(cron_expr: &str) -> Job {
     let last_eq: Arc<Mutex<Option<EarthquakeYahoo>>> = Arc::new(Mutex::new(None));
-    Job::new_async("0/5 * * * * *", move |_uuid, _l| {
+    Job::new_async(cron_expr, move |_uuid, _l| {
         let last_eq_clone = last_eq.clone();
         Box::pin(async move {
             let new_eq = get_current_earthquake().await.unwrap();
