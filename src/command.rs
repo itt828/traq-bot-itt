@@ -7,11 +7,12 @@ use strip_ansi_escapes;
 use traq::{apis::message_api::post_message, models::PostMessageRequest};
 use traq_ws_bot::events::common::Message;
 
-use crate::Resource;
+use crate::{Resource, COMMAND_PREFIX};
 
-use self::join::Join;
+use self::{join::Join, shellgei::Shellgei};
 
 pub mod join;
+pub mod shellgei;
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
@@ -24,6 +25,8 @@ pub struct Hoge {
 #[derive(Debug, Subcommand)]
 pub enum SubCommands {
     Join(Join),
+    #[command(alias = "sg")]
+    Shellgei(Shellgei),
 }
 
 pub async fn handle_subcommands(
@@ -32,7 +35,8 @@ pub async fn handle_subcommands(
     resource: Arc<Resource>,
 ) {
     match subcommands {
-        SubCommands::Join(x) => join::handle_join(x, message, resource).await,
+        SubCommands::Join(args) => join::handle_join(args, message, resource).await,
+        SubCommands::Shellgei(args) => shellgei::handle_shellgei(args, message, resource).await,
     }
 }
 
@@ -41,7 +45,7 @@ pub async fn command_parser(input_args: Vec<String>) -> Result<Hoge, clap::error
 }
 
 fn is_command_prefix(first_word: String) -> bool {
-    let prefix = regex::Regex::new(r"^(?i)(@bot_itt|cmd)").unwrap();
+    let prefix = regex::Regex::new(COMMAND_PREFIX).unwrap();
     prefix.is_match(&first_word)
 }
 
