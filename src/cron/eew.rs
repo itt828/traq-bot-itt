@@ -13,8 +13,10 @@ use traq::{
 
 pub async fn eew_info_cron(cron_expr: &str, config: Arc<Configuration>) -> Job {
     let last_message_id: Arc<Mutex<Option<String>>> = Arc::new(Mutex::new(None));
+    let last_eew_id: Arc<Mutex<Option<String>>> = Arc::new(Mutex::new(None));
     Job::new_async(cron_expr, move |_uuid, _l| {
         let last_message_id_clone = last_message_id.clone();
+        let last_eew_id_clone = last_eew_id.clone();
         let config_clone = config.clone();
         Box::pin(async move {
             let now = Local::now();
@@ -22,20 +24,33 @@ pub async fn eew_info_cron(cron_expr: &str, config: Arc<Configuration>) -> Job {
             match &*new_eew.report_num {
                 "" => (),
                 "1" => {
-                    let resp = eew_post_handler(&new_eew, config_clone).await;
+                    let last_eew_id_clone_locked = last_eew_id_clone.lock().unwrap().clone();
+                    if last_eew_id_clone_locked.is_none()
+                        || last_eew_id_clone_locked.is_some_and(|x| x != new_eew.report_id.as_str())
                     {
-                        let mut last_message_id_locked = last_message_id_clone.lock().unwrap();
-                        *last_message_id_locked = Some(resp.id.to_string());
+                        let resp = eew_post_handler(&new_eew, config_clone).await;
+                        {
+                            *last_message_id_clone.lock().unwrap() = Some(resp.id.to_string());
+                            *last_eew_id_clone.lock().unwrap() =
+                                Some(new_eew.report_id.to_string());
+                        }
                     }
                 }
                 _ => {
                     let last_message_id_clone_clone = last_message_id_clone.lock().unwrap().clone();
-                    eew_edit_handler(
-                        &new_eew,
-                        &*last_message_id_clone_clone.unwrap(),
-                        config_clone,
-                    )
-                    .await;
+                    match last_message_id_clone_clone {
+                        None => {
+                            let resp = eew_post_handler(&new_eew, config_clone).await;
+                            {
+                                let mut last_message_id_locked =
+                                    last_message_id_clone.lock().unwrap();
+                                *last_message_id_locked = Some(resp.id.to_string());
+                            }
+                        }
+                        Some(message_id) => {
+                            eew_edit_handler(&new_eew, &message_id, config_clone).await;
+                        }
+                    }
                 }
             }
         })
@@ -58,7 +73,7 @@ async fn eew_post_handler(eew: &Eew, config: Arc<Configuration>) -> traq::models
 }
 async fn eew_edit_handler(eew: &Eew, message_id: &str, config: Arc<Configuration>) {
     let message = format!(r"{:#?}", eew);
-    edit_message(
+    let _ = edit_message(
         &config,
         message_id,
         Some(PostMessageRequest {

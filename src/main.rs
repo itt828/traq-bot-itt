@@ -1,6 +1,7 @@
 mod command;
 mod cron;
 mod handler;
+mod utils;
 use std::sync::Arc;
 
 use crate::handler::{direct_message_created_handler, message_created_handler};
