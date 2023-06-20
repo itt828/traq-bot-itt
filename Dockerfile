@@ -3,5 +3,5 @@ WORKDIR /app
 COPY . .
 RUN cargo build --release
 
-FROM gcr.io/distroless/base AS runtime
-COPY --from=builder /app/target/release/itt-bot .
+FROM gcr.io/distroless/cc AS runtime
+COPY --from=builder /app/target/release/itt-bot /
