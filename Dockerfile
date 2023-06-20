@@ -1,5 +1,6 @@
 FROM rust:1.70.0 as builder
 WORKDIR /app
+COPY . .
 RUN cargo build --release
 
 # We do not need the Rust toolchain to run the binary!
