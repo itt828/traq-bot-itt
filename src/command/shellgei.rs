@@ -33,8 +33,12 @@ pub struct ShellgeiImage {
     format: String,
 }
 
-pub async fn handle_shellgei(_args: Shellgei, message: Message, resource: Arc<Resource>) {
-    let regex = Regex::new(SHELLGEI_PREFIX).unwrap();
+pub async fn handle_shellgei(
+    _args: Shellgei,
+    message: Message,
+    resource: Arc<Resource>,
+) -> anyhow::Result<()> {
+    let regex = Regex::new(SHELLGEI_PREFIX)?;
     let payload = regex.replace(&message.plain_text, "");
     let body = serde_json::json!({
         "code" : payload,
@@ -44,12 +48,9 @@ pub async fn handle_shellgei(_args: Shellgei, message: Message, resource: Arc<Re
         .post("https://websh.jiro4989.com/api/shellgei")
         .json(&body)
         .send()
-        .await
-        .unwrap()
+        .await?
         .json::<ShellgeiResponse>()
-        .await
-        .unwrap();
-
+        .await?;
     let channel_id = Arc::new(message.channel_id);
     let image_urls = resp.images.iter().map(|f| {
         let image_decode = general_purpose::STANDARD.decode(&f.image).unwrap();
@@ -64,13 +65,18 @@ pub async fn handle_shellgei(_args: Shellgei, message: Message, resource: Arc<Re
                 &format!("shellgei.{}", format),
                 &channel_id,
             )
-            .await;
+            .await
+            .unwrap();
             url
         }
     });
 
     let images = futures::future::join_all(image_urls).await;
-    let msg = format!("{}\n{}", resp.stdout, images.join("\n"));
+    let msg = format!(
+        "{}\n{}",
+        resp.stdout,
+        images.into_iter().map(|x| x).collect::<Vec<_>>().join("\n")
+    );
     let _ = post_message(
         &resource.clone().configuration,
         &channel_id,
@@ -80,4 +86,5 @@ pub async fn handle_shellgei(_args: Shellgei, message: Message, resource: Arc<Re
         }),
     )
     .await;
+    Ok(())
 }

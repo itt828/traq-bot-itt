@@ -33,68 +33,74 @@ pub async fn handle_subcommands(
     subcommands: SubCommands,
     message: Message,
     resource: Arc<Resource>,
-) {
-    match subcommands {
-        SubCommands::Join(args) => join::handle_join(args, message, resource).await,
-        SubCommands::Shellgei(args) => shellgei::handle_shellgei(args, message, resource).await,
-    }
+) -> anyhow::Result<()> {
+    Ok(match subcommands {
+        SubCommands::Join(args) => join::handle_join(args, message, resource).await?,
+        SubCommands::Shellgei(args) => shellgei::handle_shellgei(args, message, resource).await?,
+    })
 }
 
-pub async fn command_parser(input_args: Vec<String>) -> Result<Hoge, clap::error::Error> {
+pub async fn command_parser(input_args: &Vec<String>) -> Result<Hoge, clap::error::Error> {
     Hoge::try_parse_from(input_args)
 }
 
-fn is_command_prefix(first_word: String) -> bool {
-    let prefix = regex::Regex::new(COMMAND_PREFIX).unwrap();
-    prefix.is_match(&first_word)
+fn is_command_prefix(first_word: &str) -> anyhow::Result<bool> {
+    let prefix = regex::Regex::new(COMMAND_PREFIX)?;
+    Ok(prefix.is_match(first_word))
 }
 
-pub fn split_words(msg: &str) -> Vec<String> {
-    shlex::split(msg).unwrap()
+pub fn split_words(msg: &str) -> Option<Vec<String>> {
+    shlex::split(msg)
 }
 
-pub fn make_error_string(error: clap::Error) -> String {
-    let error_string =
-        String::from_utf8(strip_ansi_escapes::strip(&error.render().to_string()).unwrap()).unwrap();
-    error_string
+pub fn make_error_string(error: clap::Error) -> anyhow::Result<String> {
+    let error_string = String::from_utf8(strip_ansi_escapes::strip(&error.render().to_string())?)?;
+    Ok(error_string)
 }
 
-pub async fn exec_command(message: Message, resource: Arc<Resource>) {
+pub async fn exec_command(message: Message, resource: Arc<Resource>) -> anyhow::Result<()> {
     let msg = message.plain_text.clone();
     let arg_vec = split_words(&msg);
-
-    if is_command_prefix(arg_vec[0].clone()) {
-        let parsed = command_parser(arg_vec).await;
-        match parsed {
-            Ok(x) => handle_subcommands(x.subcommand, message, resource).await,
-            Err(e) => {
-                let error_string = make_error_string(e);
-                let _ = post_message(
-                    &resource.configuration,
-                    &message.channel_id,
-                    Some(PostMessageRequest {
-                        content: format!("```\n{}\n```", error_string),
-                        embed: None,
-                    }),
-                )
-                .await;
+    match arg_vec {
+        Some(args) => {
+            if is_command_prefix(&args[0])? {
+                let parsed = command_parser(&args).await;
+                match parsed {
+                    Ok(x) => handle_subcommands(x.subcommand, message, resource).await?,
+                    Err(e) => {
+                        let error_string = make_error_string(e);
+                        let _msg = post_message(
+                            &resource.configuration,
+                            &message.channel_id,
+                            Some(PostMessageRequest {
+                                content: format!("```\n{}\n```", error_string?),
+                                embed: None,
+                            }),
+                        )
+                        .await?;
+                    }
+                };
             }
+            Ok(())
         }
+        None => Ok(()),
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use anyhow::Ok;
 
     #[test]
-    fn test_is_command() {
+    fn test_is_command() -> anyhow::Result<()> {
         use super::*;
-        assert_eq!(is_command_prefix("@BOT_itt hoge".to_string()), true);
-        assert_eq!(is_command_prefix("@bot_itt hoge".to_string()), true);
-        assert_eq!(is_command_prefix("@botitt hoge".to_string()), false);
-        assert_eq!(is_command_prefix("bot_itt hoge".to_string()), false);
-        assert_eq!(is_command_prefix("hoge".to_string()), false);
-        assert_eq!(is_command_prefix("cmd".to_string()), true);
-        assert_eq!(is_command_prefix("cMd".to_string()), true);
+        assert_eq!(is_command_prefix("@BOT_itt hoge")?, true);
+        assert_eq!(is_command_prefix("@bot_itt hoge")?, true);
+        assert_eq!(is_command_prefix("@botitt hoge")?, false);
+        assert_eq!(is_command_prefix("bot_itt hoge")?, false);
+        assert_eq!(is_command_prefix("hoge")?, false);
+        assert_eq!(is_command_prefix("cmd")?, true);
+        assert_eq!(is_command_prefix("cMd")?, true);
+        Ok(())
     }
 }

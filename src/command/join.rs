@@ -14,7 +14,11 @@ pub struct Join {
     channel_id: Option<String>,
 }
 
-pub async fn handle_join(args: Join, message: Message, resource: Arc<Resource>) {
+pub async fn handle_join(
+    args: Join,
+    message: Message,
+    resource: Arc<Resource>,
+) -> anyhow::Result<()> {
     let channel_id = match args.channel_id {
         Some(s) => s,
         None => message.channel_id,
@@ -32,8 +36,9 @@ pub async fn handle_join(args: Join, message: Message, resource: Arc<Resource>) 
         &resource.configuration,
         &resource.bot_id,
         Some(PostBotActionJoinRequest {
-            channel_id: uuid::Uuid::from_str(&channel_id).unwrap(),
+            channel_id: uuid::Uuid::from_str(&channel_id)?,
         }),
     )
     .await;
+    Ok(())
 }

@@ -12,8 +12,8 @@ pub async fn get_eew(dt: chrono::DateTime<Local>) -> Result<Eew> {
         .await?
         .text()
         .await?;
-        let v = serde_json::from_str::<Eew>(&body).unwrap();
+        let v = serde_json::from_str::<Eew>(&body);
         v
-    };
+    }?;
     Ok(new_eew)
 }

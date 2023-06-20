@@ -1,3 +1,4 @@
+use anyhow::Ok;
 use earthquake_info::{
     earthquake_yahoo::get_current_earthquake, models::earthquake_yahoo::EarthquakeYahoo,
 };
@@ -10,9 +11,12 @@ use traq::{
 
 use crate::GPS_EARTHQUAKE;
 
-pub async fn earthquake_info_cron(cron_expr: &str, config: Arc<Configuration>) -> Job {
+pub async fn earthquake_info_cron(
+    cron_expr: &str,
+    config: Arc<Configuration>,
+) -> anyhow::Result<Job> {
     let last_eq: Arc<Mutex<Option<EarthquakeYahoo>>> = Arc::new(Mutex::new(None));
-    Job::new_async(cron_expr, move |_uuid, _l| {
+    Ok(Job::new_async(cron_expr, move |_uuid, _l| {
         let last_eq_clone = last_eq.clone();
         let config_clone = config.clone();
         Box::pin(async move {
@@ -36,8 +40,7 @@ pub async fn earthquake_info_cron(cron_expr: &str, config: Arc<Configuration>) -
                 earthquake_update_handler(&new_eq, config_clone).await;
             }
         })
-    })
-    .unwrap()
+    })?)
 }
 
 async fn earthquake_update_handler(eew: &EarthquakeYahoo, config: Arc<Configuration>) {
