@@ -2,20 +2,20 @@ use std::{str::FromStr, sync::Arc};
 
 use clap::Args;
 use traq::{
-    apis::{bot_api::let_bot_left_channel, channel_api::post_message},
-    models::{PostBotActionJoinRequest, PostMessageRequest},
+    apis::{bot_api::let_bot_leave_channel, channel_api::post_message},
+    models::{PostBotActionLeaveRequest, PostMessageRequest},
 };
 use traq_ws_bot::events::common::Message;
 
 use crate::Resource;
 
 #[derive(Debug, Args)]
-pub struct Left {
+pub struct Leave {
     channel_id: Option<String>,
 }
 
-pub async fn handle_left(
-    args: Left,
+pub async fn handle_leave(
+    args: Leave,
     message: Message,
     resource: Arc<Resource>,
 ) -> anyhow::Result<()> {
@@ -32,10 +32,10 @@ pub async fn handle_left(
         }),
     )
     .await;
-    let _ = let_bot_left_channel(
+    let _ = let_bot_leave_channel(
         &resource.configuration,
         &resource.bot_id,
-        Some(PostBotActionJoinRequest {
+        Some(PostBotActionLeaveRequest {
             channel_id: uuid::Uuid::from_str(&channel_id)?,
         }),
     )

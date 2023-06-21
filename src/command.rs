@@ -9,10 +9,10 @@ use traq_ws_bot::events::common::Message;
 
 use crate::{Resource, COMMAND_PREFIX};
 
-use self::{join::Join, left::Left, shellgei::Shellgei};
+use self::{join::Join, leave::Leave, shellgei::Shellgei};
 
 pub mod join;
-pub mod left;
+pub mod leave;
 pub mod shellgei;
 
 /// Simple program to greet a person
@@ -26,7 +26,7 @@ pub struct Hoge {
 #[derive(Debug, Subcommand)]
 pub enum SubCommands {
     Join(Join),
-    Left(Left),
+    Leave(Leave),
     #[command(alias = "sg")]
     Shellgei(Shellgei),
 }
@@ -38,7 +38,7 @@ pub async fn handle_subcommands(
 ) -> anyhow::Result<()> {
     Ok(match subcommands {
         SubCommands::Join(args) => join::handle_join(args, message, resource).await?,
-        SubCommands::Left(args) => left::handle_left(args, message, resource).await?,
+        SubCommands::Leave(args) => leave::handle_leave(args, message, resource).await?,
         SubCommands::Shellgei(args) => shellgei::handle_shellgei(args, message, resource).await?,
     })
 }
