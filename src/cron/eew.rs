@@ -1,5 +1,5 @@
 use crate::GPS_EARTHQUAKE;
-use chrono::{Duration, Local};
+use chrono::{Duration, FixedOffset, Local};
 use earthquake_info::{eew::get_eew, models::eew::Eew};
 use std::sync::{Arc, Mutex};
 use tokio_cron_scheduler::Job;
@@ -19,8 +19,9 @@ pub async fn eew_info_cron(cron_expr: &str, config: Arc<Configuration>) -> Job {
         let last_eew_id_num = last_eew_id_num.clone();
         let config_clone = config.clone();
         Box::pin(async move {
-            let now = Local::now() - Duration::seconds(2);
-            let new_eew = get_eew(now).await.unwrap();
+            let now = Local::now().with_timezone(&FixedOffset::east_opt(9 * 3600).unwrap())
+                - Duration::seconds(2);
+            let new_eew = get_eew(now.into()).await.unwrap();
             match &*new_eew.report_num {
                 // 第1報: 最後のeew_idがないまたは異なっている場合投稿、そうでない場合無視
                 // 第n報: 最後のeew_idがないまたは異なっている場合投稿、eew_idが同じでnumが異なる場合更新、そうでない場合無視
