@@ -1,19 +1,17 @@
 use std::sync::Arc;
 
 use clap::{Parser, Subcommand};
-use regex;
-use shlex;
-use strip_ansi_escapes;
 use traq::{apis::message_api::post_message, models::PostMessageRequest};
 use traq_ws_bot::events::common::Message;
 
 use crate::{Resource, COMMAND_PREFIX};
 
-use self::{join::Join, leave::Leave, shellgei::Shellgei};
+use self::{join::Join, leave::Leave, shellgei::Shellgei, time::Time};
 
 pub mod join;
 pub mod leave;
 pub mod shellgei;
+pub mod time;
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
@@ -29,6 +27,7 @@ pub enum SubCommands {
     Leave(Leave),
     #[command(alias = "sg")]
     Shellgei(Shellgei),
+    Time(Time),
 }
 
 pub async fn handle_subcommands(
@@ -36,11 +35,13 @@ pub async fn handle_subcommands(
     message: Message,
     resource: Arc<Resource>,
 ) -> anyhow::Result<()> {
-    Ok(match subcommands {
+    match subcommands {
         SubCommands::Join(args) => join::handle_join(args, message, resource).await?,
         SubCommands::Leave(args) => leave::handle_leave(args, message, resource).await?,
         SubCommands::Shellgei(args) => shellgei::handle_shellgei(args, message, resource).await?,
-    })
+        SubCommands::Time(args) => time::handle_time(args, message, resource).await?,
+    }
+    Ok(())
 }
 
 pub async fn command_parser(input_args: &Vec<String>) -> Result<Hoge, clap::error::Error> {
