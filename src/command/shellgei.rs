@@ -58,7 +58,7 @@ pub async fn handle_shellgei(
         let resource_clone = resource.clone();
         let channel_id = channel_id.clone();
         async move {
-            let url = traq_file_upload(
+            traq_file_upload(
                 &resource_clone.configuration,
                 image_decode,
                 &format!("image/{}", format),
@@ -66,8 +66,7 @@ pub async fn handle_shellgei(
                 &channel_id,
             )
             .await
-            .unwrap();
-            url
+            .unwrap()
         }
     });
 
@@ -75,7 +74,7 @@ pub async fn handle_shellgei(
     let msg = format!(
         "{}\n{}",
         resp.stdout,
-        images.into_iter().map(|x| x).collect::<Vec<_>>().join("\n")
+        images.into_iter().collect::<Vec<_>>().join("\n")
     );
     let _ = post_message(
         &resource.clone().configuration,

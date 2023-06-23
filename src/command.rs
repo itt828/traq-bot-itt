@@ -57,7 +57,7 @@ pub fn split_words(msg: &str) -> Option<Vec<String>> {
 }
 
 pub fn make_error_string(error: clap::Error) -> anyhow::Result<String> {
-    let error_string = String::from_utf8(strip_ansi_escapes::strip(&error.render().to_string())?)?;
+    let error_string = String::from_utf8(strip_ansi_escapes::strip(error.render().to_string())?)?;
     Ok(error_string)
 }
 
@@ -97,13 +97,13 @@ mod tests {
     #[test]
     fn test_is_command() -> anyhow::Result<()> {
         use super::*;
-        assert_eq!(is_command_prefix("@BOT_itt hoge")?, true);
-        assert_eq!(is_command_prefix("@bot_itt hoge")?, true);
-        assert_eq!(is_command_prefix("@botitt hoge")?, false);
-        assert_eq!(is_command_prefix("bot_itt hoge")?, false);
-        assert_eq!(is_command_prefix("hoge")?, false);
-        assert_eq!(is_command_prefix("cmd")?, true);
-        assert_eq!(is_command_prefix("cMd")?, true);
+        assert!(is_command_prefix("@BOT_itt hoge")?);
+        assert!(is_command_prefix("@bot_itt hoge")?);
+        assert!(is_command_prefix("@botitt hoge")?);
+        assert!(is_command_prefix("bot_itt hoge")?);
+        assert!(is_command_prefix("hoge")?);
+        assert!(is_command_prefix("cmd")?);
+        assert!(is_command_prefix("cMd")?);
         Ok(())
     }
 }

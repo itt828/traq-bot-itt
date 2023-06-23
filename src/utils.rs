@@ -27,6 +27,6 @@ pub async fn traq_file_upload(
     let resp = resp?.json::<Value>().await?;
     Ok(format!(
         "https://q.trap.jp/files/{}",
-        resp["id"].as_str().unwrap().to_string()
+        resp["id"].as_str().unwrap()
     ))
 }
