@@ -3,7 +3,7 @@ use crate::models::eew::Eew;
 use chrono::prelude::*;
 use reqwest;
 
-pub async fn get_eew(dt: chrono::DateTime<Local>) -> Result<Eew> {
+pub async fn get_eew(dt: chrono::DateTime<FixedOffset>) -> Result<Eew> {
     println!("{}", dt);
     let new_eew = {
         let body = reqwest::get(format!(

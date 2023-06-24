@@ -21,7 +21,7 @@ pub async fn eew_info_cron(cron_expr: &str, config: Arc<Configuration>) -> Job {
         Box::pin(async move {
             let now = Local::now().with_timezone(&FixedOffset::east_opt(9 * 3600).unwrap())
                 - Duration::seconds(2);
-            let new_eew = get_eew(now.into()).await.unwrap();
+            let new_eew = get_eew(now).await.unwrap();
             match &*new_eew.report_num {
                 // 第1報: 最後のeew_idがないまたは異なっている場合投稿、そうでない場合無視
                 // 第n報: 最後のeew_idがないまたは異なっている場合投稿、eew_idが同じでnumが異なる場合更新、そうでない場合無視
