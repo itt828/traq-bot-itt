@@ -4,6 +4,7 @@ use chrono::prelude::*;
 use reqwest;
 
 pub async fn get_eew(dt: chrono::DateTime<Local>) -> Result<Eew> {
+    println!("{}", dt);
     let new_eew = {
         let body = reqwest::get(format!(
             "http://www.kmoni.bosai.go.jp/webservice/hypo/eew/{}.json",
