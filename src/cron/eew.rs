@@ -1,5 +1,5 @@
 use crate::GPS_EARTHQUAKE;
-use chrono::{Duration, FixedOffset, Local};
+use chrono::{Duration, FixedOffset, Local, NaiveDateTime};
 use earthquake_info::{eew::get_eew, models::eew::Eew};
 use std::sync::{Arc, Mutex};
 use tokio_cron_scheduler::Job;
@@ -81,7 +81,29 @@ async fn eew_post_handler(eew: &Eew, config: Arc<Configuration>) -> traq::models
     .unwrap()
 }
 async fn eew_edit_handler(eew: &Eew, message_id: &str, config: Arc<Configuration>) {
-    let message = format!(r"{:#?}", eew);
+    let message = format!(
+        r"## 緊急地震速報: 第{}報{}{}
+        - 震源地: **{}**
+        - 最大震度: **{}**  
+        - マグニチュード: **{}**
+        - 地震発生時刻: **{}**
+    ",
+        eew.report_num,
+        if eew.is_final.unwrap() {
+            "(最終)"
+        } else {
+            ""
+        },
+        if eew.is_training.unwrap() {
+            "(訓練)"
+        } else {
+            ""
+        },
+        eew.region_name,
+        eew.calcintensity,
+        eew.magunitude,
+        fix_date_format(&eew.origin_time)
+    );
     let _ = edit_message(
         &config,
         message_id,
@@ -91,4 +113,8 @@ async fn eew_edit_handler(eew: &Eew, message_id: &str, config: Arc<Configuration
         }),
     )
     .await;
+}
+fn fix_date_format(time: &str) -> String {
+    let t = NaiveDateTime::parse_from_str(time, "%Y%m%d%H%M%S").unwrap();
+    t.format("%Y/%m/%d %H:%M:%S").to_string()
 }

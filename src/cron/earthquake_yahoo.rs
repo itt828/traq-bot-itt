@@ -43,8 +43,24 @@ pub async fn earthquake_info_cron(
     })?)
 }
 
-async fn earthquake_update_handler(eew: &EarthquakeYahoo, config: Arc<Configuration>) {
-    let message = format!(r"{:#?}", eew);
+async fn earthquake_update_handler(eq: &EarthquakeYahoo, config: Arc<Configuration>) {
+    let message = format!(
+        r"## 地震発生
+- 発生時刻: **{}**
+- 震源地: **{}**
+- 最大震度: **{}**
+- マグニチュード: **{}**
+- 深さ: **{}**
+- 情報: **{}**
+https://typhoon.yahoo.co.jp/weather/jp/earthquake/{}.html",
+        eq.time,
+        eq.hypocenter,
+        eq.max_seismic_intensity,
+        eq.magnitude,
+        eq.depth,
+        eq.info,
+        eq.url_time.as_ref().unwrap()
+    );
     let _ = post_message(
         &config,
         GPS_EARTHQUAKE,
