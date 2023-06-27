@@ -68,7 +68,7 @@ pub async fn eew_info_cron(cron_expr: &str, config: Arc<Configuration>) -> Job {
 }
 
 async fn eew_post_handler(eew: &Eew, config: Arc<Configuration>) -> traq::models::Message {
-    let message = format!(r"{:#?}", eew);
+    let message = eew_output(eew);
     post_message(
         &config,
         GPS_EARTHQUAKE,
@@ -81,7 +81,24 @@ async fn eew_post_handler(eew: &Eew, config: Arc<Configuration>) -> traq::models
     .unwrap()
 }
 async fn eew_edit_handler(eew: &Eew, message_id: &str, config: Arc<Configuration>) {
-    let message = format!(
+    let message = eew_output(eew);
+    let _ = edit_message(
+        &config,
+        message_id,
+        Some(PostMessageRequest {
+            content: message,
+            embed: None,
+        }),
+    )
+    .await;
+}
+fn fix_date_format(time: &str) -> String {
+    let t = NaiveDateTime::parse_from_str(time, "%Y%m%d%H%M%S").unwrap();
+    t.format("%Y/%m/%d %H:%M:%S").to_string()
+}
+
+fn eew_output(eew: &Eew) -> String {
+    format!(
         r"## 緊急地震速報: 第{}報{}{}
         - 震源地: **{}**
         - 最大震度: **{}**  
@@ -103,18 +120,5 @@ async fn eew_edit_handler(eew: &Eew, message_id: &str, config: Arc<Configuration
         eew.calcintensity,
         eew.magunitude,
         fix_date_format(&eew.origin_time)
-    );
-    let _ = edit_message(
-        &config,
-        message_id,
-        Some(PostMessageRequest {
-            content: message,
-            embed: None,
-        }),
     )
-    .await;
-}
-fn fix_date_format(time: &str) -> String {
-    let t = NaiveDateTime::parse_from_str(time, "%Y%m%d%H%M%S").unwrap();
-    t.format("%Y/%m/%d %H:%M:%S").to_string()
 }
