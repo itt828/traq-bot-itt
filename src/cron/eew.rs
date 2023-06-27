@@ -100,10 +100,10 @@ fn fix_date_format(time: &str) -> String {
 fn eew_output(eew: &Eew) -> String {
     format!(
         r"## 緊急地震速報: 第{}報{}{}
-        - 震源地: **{}**
-        - 最大震度: **{}**  
-        - マグニチュード: **{}**
-        - 地震発生時刻: **{}**
+- 震源地: **{}**
+- 最大震度: **{}**  
+- マグニチュード: **{}**
+- 地震発生時刻: **{}**
     ",
         eew.report_num,
         if eew.is_final.unwrap() {
