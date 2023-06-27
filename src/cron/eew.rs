@@ -55,8 +55,10 @@ pub async fn eew_info_cron(cron_expr: &str, config: Arc<Configuration>) -> Job {
                         }
                         Some(message_id) => {
                             let last_eew_id_num_lock = last_eew_id_num.lock().unwrap().clone();
-                            if new_eew.report_num != last_eew_id_num_lock.unwrap().1 {
-                                eew_edit_handler(&new_eew, &message_id, config_clone).await;
+                            if let Some((_report_id, report_num)) = last_eew_id_num_lock {
+                                if report_num != new_eew.report_num {
+                                    eew_edit_handler(&new_eew, &message_id, config_clone).await;
+                                }
                             }
                         }
                     }
