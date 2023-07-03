@@ -1,4 +1,3 @@
-pub mod earthquake;
-pub mod eew;
+pub mod earthquake_yahoo;
 pub mod error;
 pub mod models;

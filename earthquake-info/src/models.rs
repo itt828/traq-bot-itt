@@ -1,2 +1,1 @@
-pub mod earthquake;
-pub mod eew;
+pub mod earthquake_yahoo;
