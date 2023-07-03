@@ -9,7 +9,7 @@ use cron::cron_jobs;
 use traq::apis::configuration::Configuration;
 use traq_ws_bot::bot::builder;
 
-const GPS_EARTHQUAKE: &str = "0043558c-6efb-4a01-8a21-fcb171190f64";
+const GPS_EARTHQUAKE: &str = "971ff17d-9bc8-443d-bf05-30afc09be379";
 const COMMAND_PREFIX: &str = r"^(?i)(@bot_itt|cmd)";
 
 pub struct Resource {
