@@ -936,6 +936,7 @@ dependencies = [
  "clap",
  "earthquake-info",
  "futures",
+ "once_cell",
  "regex",
  "reqwest",
  "serde",
