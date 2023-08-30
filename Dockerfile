@@ -11,7 +11,7 @@ RUN cargo chef cook --release --recipe-path recipe.json
 COPY . .
 RUN cargo build --release
 
-FROM debian:bullseye
+FROM ubuntu:latest
 RUN apt-get -y update \
     && apt-get -y install build-essential libssl-dev openssl
 COPY --from=builder /app/target/release/itt-bot /
