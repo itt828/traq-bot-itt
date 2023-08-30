@@ -66,7 +66,8 @@ pub async fn handle_poke_recipe(
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .stderr(Stdio::null())
-            .spawn()?;
+            .spawn()
+            .expect("error while executing tesseract");
         process.stdin.unwrap().write_all(&image)?;
         let mut s = String::new();
         process.stdout.unwrap().read_to_string(&mut s)?;
