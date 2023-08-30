@@ -12,8 +12,8 @@ RUN cargo build --release
 
 
 FROM debian:bullseye-slim
-RUN apt-get update && \
-    apt-get install tesseract-ocr -y && \
-    apt-get install tesseract-ocr-jpn -y
+RUN apt-get -y update && \
+    apt-get -y install build-essential libssl-dev libssl3 && \
+    tesseract-ocr tesseract-ocr-jpn
 
 COPY --from=builder /app/target/release/itt-bot /
