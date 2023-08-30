@@ -80,5 +80,269 @@
                 "num": 3
             }
         ]
+    },
+    {
+        "name": "とくせんリンゴカレー",
+        "category": "カレー",
+        "energy": 668,
+        "ingredients": [
+            {
+                "name": "とくせんリンゴ",
+                "num": 7
+            }
+        ]
+    },
+    {
+        "name": "たんじゅんホワイトシチュー",
+        "category": "カレー",
+        "energy": 727,
+        "ingredients": [
+            {
+                "name": "モーモーミルク",
+                "num": 7
+            }
+        ]
+    },
+    {
+        "name": "ベイビィハニーカレー",
+        "category": "カレー",
+        "energy": 749,
+        "ingredients": [
+            {
+                "name": "あまいミツ",
+                "num": 7
+            }
+        ]
+    },
+    {
+        "name": "マメバーグカレー",
+        "category": "カレー",
+        "energy": 764,
+        "ingredients": [
+            {
+                "name": "マメミート",
+                "num": 7
+            }
+        ]
+    },
+    {
+        "name": "満腹チーズバーグカレー",
+        "category": "カレー",
+        "energy": 1785,
+        "ingredients": [
+            {
+                "name": "モーモーミルク",
+                "num": 8
+            },
+            {
+                "name": "マメミート",
+                "num": 8
+            }
+        ]
+    },
+    {
+        "name": "ひでりカツレツカレー",
+        "category": "カレー",
+        "energy": 1814,
+        "ingredients": [
+            {
+                "name": "マメミート",
+                "num": 10
+            },
+            {
+                "name": "ピュアなオイル",
+                "num": 5
+            }
+        ]
+    },
+    {
+        "name": "サンパワートマトカレー",
+        "category": "カレー",
+        "energy": 1943,
+        "ingredients": [
+            {
+                "name": "げきからハーブ",
+                "num": 5
+            },
+            {
+                "name": "あんみんトマト",
+                "num": 10
+            }
+        ]
+    },
+    {
+        "name": "とろけるおむカレー",
+        "category": "カレー",
+        "energy": 2009,
+        "ingredients": [
+            {
+                "name": "とくせんエッグ",
+                "num": 10
+            },
+            {
+                "name": "あんみんトマト",
+                "num": 6
+            }
+        ]
+    },
+    {
+        "name": "ほっこりポテトシチュー",
+        "category": "カレー",
+        "energy": 3089,
+        "ingredients": [
+            {
+                "name": "モーモーミルク",
+                "num": 10
+            },
+            {
+                "name": "ほっこりポテト",
+                "num": 8
+            },
+            {
+                "name": "あじわいキノコ",
+                "num": 4
+            }
+        ]
+    },
+    {
+        "name": "ビルドアップマメカレー",
+        "category": "カレー",
+        "energy": 3274,
+        "ingredients": [
+            {
+                "name": "ワカクサ大豆",
+                "num": 12
+            },
+            {
+                "name": "マメミート",
+                "num": 6
+            },
+            {
+                "name": "とくせんエッグ",
+                "num": 4
+            },
+            {
+                "name": "げきからハーブ",
+                "num": 4
+            }
+        ]
+    },
+    {
+        "name": "キノコのほうしカレー",
+        "category": "カレー",
+        "energy": 4041,
+        "ingredients": [
+            {
+                "name": "あじわいキノコ",
+                "num": 14
+            },
+            {
+                "name": "ほっこりポテト",
+                "num": 9
+            }
+        ]
+    },
+    {
+        "name": "エッグボムカレー",
+        "category": "カレー",
+        "energy": 4523,
+        "ingredients": [
+            {
+                "name": "あまいミツ",
+                "num": 12
+            },
+            {
+                "name": "とくせんリンゴ",
+                "num": 11
+            },
+            {
+                "name": "とくせんエッグ",
+                "num": 8
+            },
+            {
+                "name": "ほっこりポテト",
+                "num": 4
+            }
+        ]
+    },
+    {
+        "name": "げきからネギカレー",
+        "category": "カレー",
+        "energy": 5900,
+        "ingredients": [
+            {
+                "name": "ふといながねぎ",
+                "num": 14
+            },
+            {
+                "name": "あったかジンジャー",
+                "num": 10
+            },
+            {
+                "name": "げきからハーブ",
+                "num": 8
+            }
+        ]
+    },
+    {
+        "name": "にんじゃカレー",
+        "category": "カレー",
+        "energy": 6159,
+        "ingredients": [
+            {
+                "name": "ワカクサ大豆",
+                "num": 15
+            },
+            {
+                "name": "マメミート",
+                "num": 9
+            },
+            {
+                "name": "ふといながねぎ",
+                "num": 9
+            },
+            {
+                "name": "あじわいキノコ",
+                "num": 5
+            }
+        ]
+    },
+    {
+        "name": "ヤドンのしっぽカレー",
+        "category": "カレー",
+        "energy": 7483,
+        "ingredients": [
+            {
+                "name": "おいしいシッポ",
+                "num": 8
+            },
+            {
+                "name": "げきからハーブ",
+                "num": 25
+            }
+        ]
+    },
+    {
+        "name": "ぜったいねむりバターカレー",
+        "category": "カレー",
+        "energy": 9010,
+        "ingredients": [
+            {
+                "name": "ほっこりポテト",
+                "num": 18
+            },
+            {
+                "name": "あんみんトマト",
+                "num": 15
+            },
+            {
+                "name": "リラックスカカオ",
+                "num": 12
+            },
+            {
+                "name": "モーモーミルク",
+                "num": 10
+            }
+        ]
     }
 ]
