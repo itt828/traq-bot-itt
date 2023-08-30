@@ -13,7 +13,6 @@ RUN cargo build --release
 
 FROM debian:bullseye-slim
 RUN apt-get update && \
-    apt-get install build-essential libssl-dev libssl3 -y && \
     apt-get install tesseract-ocr -y && \
     apt-get install tesseract-ocr-jpn -y
 
