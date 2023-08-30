@@ -13,5 +13,5 @@ RUN cargo build --release
 
 FROM ubuntu:latest
 RUN apt-get -y update \
-    && apt-get -y install build-essential libssl-dev openssl
+    && apt-get -y install build-essential libssl-dev openssl ca-certificates
 COPY --from=builder /app/target/release/itt-bot /
