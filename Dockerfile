@@ -14,7 +14,8 @@ RUN cargo build --release
 FROM debian:bullseye
 RUN apt-get -y update && \
     apt-get -y install build-essential libssl-dev openssl ca-certificates \
-    && update-ca-certificates --fresh
     tesseract-ocr tesseract-ocr-jpn
+    
+    && update-ca-certificates --fresh
 
 COPY --from=builder /app/target/release/itt-bot /
