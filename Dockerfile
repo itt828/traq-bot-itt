@@ -11,7 +11,7 @@ COPY . .
 RUN cargo build --release
 
 
-FROM debian:bullseye
+FROM ubuntu:20.04
 RUN apt-get -y update && \
     apt-get -y install build-essential libssl-dev openssl  \
     tesseract-ocr tesseract-ocr-jpn
