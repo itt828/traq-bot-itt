@@ -15,3 +15,4 @@ FROM ubuntu:latest
 RUN apt-get -y update \
     && apt-get -y install build-essential libssl-dev openssl ca-certificates
 COPY --from=builder /app/target/release/itt-bot /
+COPY --from=builder /app/assets /assets

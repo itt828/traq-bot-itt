@@ -26,14 +26,14 @@ mod models;
 mod suggest;
 
 static FOODS: Lazy<Vec<Food>> = Lazy::new(|| {
-    let file = File::open("src/command/poke_recipe/assets/foods.json").unwrap();
+    let file = File::open("assets/foods.json").unwrap();
     let reader = BufReader::new(file);
     let foods: Vec<Food> = serde_json::from_reader(reader).unwrap();
     foods
 });
 
 static RECIPES: Lazy<Vec<Recipe>> = Lazy::new(|| {
-    let file = File::open("src/command/poke_recipe/assets/recipes.json").unwrap();
+    let file = File::open("assets/recipes.json").unwrap();
     let reader = BufReader::new(file);
     let recipes: Vec<Recipe> = serde_json::from_reader(reader).unwrap();
     recipes
