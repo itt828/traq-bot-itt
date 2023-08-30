@@ -11,5 +11,9 @@ COPY . .
 RUN cargo build --release
 
 
-FROM gcr.io/distroless/cc AS runtime
+FROM debian:bullseye-slim
+RUN apt-get update && \
+    apt-get install tesseract-ocr && \
+    apt-get install tesseract-ocr-jpn
+
 COPY --from=builder /app/target/release/itt-bot /
