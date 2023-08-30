@@ -11,9 +11,9 @@ COPY . .
 RUN cargo build --release
 
 
-FROM debian:bullseye-slim
+FROM debian:bullseye
 RUN apt-get -y update && \
-    apt-get -y install build-essential libssl-dev libssl3 && \
+    apt-get -y install build-essential libssl-dev && \
     tesseract-ocr tesseract-ocr-jpn
 
 COPY --from=builder /app/target/release/itt-bot /
