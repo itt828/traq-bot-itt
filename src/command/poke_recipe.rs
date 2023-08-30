@@ -41,6 +41,7 @@ static RECIPES: Lazy<Vec<Recipe>> = Lazy::new(|| {
 
 #[derive(Debug, Args)]
 pub struct PokeRecipe {
+    category: String,
     capacity: u32,
     #[arg(allow_hyphen_values = true)]
     words: Vec<String>,
@@ -72,7 +73,7 @@ pub async fn handle_poke_recipe(
         s
     };
     let bag = extract_bag_items(ocr_text)?;
-    let recipes = suggest_recipe(&RECIPES, "サラダ".to_string(), 30, &bag);
+    let recipes = suggest_recipe(&RECIPES, args.category, args.capacity, &bag);
     post_message(
         &resource.configuration,
         &message.channel_id,
