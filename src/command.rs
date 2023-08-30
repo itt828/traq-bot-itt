@@ -6,10 +6,11 @@ use traq_ws_bot::events::common::Message;
 
 use crate::{Resource, COMMAND_PREFIX};
 
-use self::{join::Join, leave::Leave, shellgei::Shellgei, time::Time};
+use self::{join::Join, leave::Leave, poke_recipe::PokeRecipe, shellgei::Shellgei, time::Time};
 
 pub mod join;
 pub mod leave;
+pub mod poke_recipe;
 pub mod shellgei;
 pub mod time;
 
@@ -28,6 +29,8 @@ pub enum SubCommands {
     #[command(alias = "sg")]
     Shellgei(Shellgei),
     Time(Time),
+    #[command(alias = "po")]
+    PokeRecipe(PokeRecipe),
 }
 
 pub async fn handle_subcommands(
@@ -40,6 +43,9 @@ pub async fn handle_subcommands(
         SubCommands::Leave(args) => leave::handle_leave(args, message, resource).await?,
         SubCommands::Shellgei(args) => shellgei::handle_shellgei(args, message, resource).await?,
         SubCommands::Time(args) => time::handle_time(args, message, resource).await?,
+        SubCommands::PokeRecipe(args) => {
+            poke_recipe::handle_poke_recipe(args, message, resource).await?
+        }
     }
     Ok(())
 }
