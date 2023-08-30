@@ -1,0 +1,84 @@
+[
+    {
+        "name": "とくせんリンゴサラダ",
+        "category": "サラダ",
+        "energy": 763,
+        "ingredients": [
+            {
+                "name": "とくせんリンゴ",
+                "num": 8
+            }
+        ]
+    },
+    {
+        "name": "マメハムサラダ",
+        "category": "サラダ",
+        "energy": 873,
+        "ingredients": [
+            {
+                "name": "マメミート",
+                "num": 8
+            }
+        ]
+    },
+    {
+        "name": "あんみんトマトサラダ",
+        "category": "サラダ",
+        "energy": 933,
+        "ingredients": [
+            {
+                "name": "あんみんトマト",
+                "num": 8
+            }
+        ]
+    },
+    {
+        "name": "ゆきかきシーザーサラダ",
+        "category": "サラダ",
+        "energy": 1774,
+        "ingredients": [
+            {
+                "name": "モーモーミルク",
+                "num": 10
+            },
+            {
+                "name": "マメミート",
+                "num": 6
+            }
+        ]
+    },
+    {
+        "name": "うるおいとうふサラダ",
+        "category": "サラダ",
+        "energy": 1843,
+        "ingredients": [
+            {
+                "name": "ワカクサ大豆",
+                "num": 10
+            },
+            {
+                "name": "あんみんトマト",
+                "num": 6
+            }
+        ]
+    },
+    {
+        "name": "メロメロりんごのチーズサラダ",
+        "category": "サラダ",
+        "energy": 2578,
+        "ingredients": [
+            {
+                "name": "とくせんリンゴ",
+                "num": 8
+            },
+            {
+                "name": "モーモーミルク",
+                "num": 5
+            },
+            {
+                "name": "ピュアなオイル",
+                "num": 3
+            }
+        ]
+    }
+]

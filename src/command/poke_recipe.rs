@@ -1,27 +1,47 @@
-use std::{
-    ffi::OsString,
-    io::{Read, Write},
-    os::unix::prelude::OsStringExt,
-    process::{Command, Stdio},
-    str::FromStr,
-    sync::Arc,
-};
-
+use crate::Resource;
 use clap::Args;
+use once_cell::sync::Lazy;
 use regex::Regex;
 use reqwest::{Client, Method};
+use std::{
+    fs::File,
+    io::{BufReader, Read, Write},
+    process::{Command, Stdio},
+    sync::Arc,
+};
 use traq::{
-    apis::{
-        bot_api::let_bot_join_channel, channel_api::post_message, configuration::Configuration,
-    },
-    models::{PostBotActionJoinRequest, PostMessageRequest},
+    apis::{channel_api::post_message, configuration::Configuration},
+    models::PostMessageRequest,
 };
 use traq_ws_bot::events::common::Message;
 
-use crate::Resource;
+use self::{
+    extract::extract_bag_items,
+    models::{Food, Recipe},
+    suggest::{format_suggest, suggest_recipe},
+};
+
+mod extract;
+mod models;
+mod suggest;
+
+static FOODS: Lazy<Vec<Food>> = Lazy::new(|| {
+    let file = File::open("src/command/poke_recipe/assets/foods.json").unwrap();
+    let reader = BufReader::new(file);
+    let foods: Vec<Food> = serde_json::from_reader(reader).unwrap();
+    foods
+});
+
+static RECIPES: Lazy<Vec<Recipe>> = Lazy::new(|| {
+    let file = File::open("src/command/poke_recipe/assets/recipes.json").unwrap();
+    let reader = BufReader::new(file);
+    let recipes: Vec<Recipe> = serde_json::from_reader(reader).unwrap();
+    recipes
+});
 
 #[derive(Debug, Args)]
 pub struct PokeRecipe {
+    capacity: u32,
     #[arg(allow_hyphen_values = true)]
     words: Vec<String>,
 }
@@ -51,11 +71,13 @@ pub async fn handle_poke_recipe(
         process.stdout.unwrap().read_to_string(&mut s)?;
         s
     };
+    let bag = extract_bag_items(ocr_text)?;
+    let recipes = suggest_recipe(&RECIPES, "サラダ".to_string(), 30, &bag);
     post_message(
         &resource.configuration,
         &message.channel_id,
         Some(PostMessageRequest {
-            content: ocr_text,
+            content: format_suggest(&recipes),
             embed: None,
         }),
     )
@@ -81,5 +103,3 @@ pub async fn get_traq_image_binary(config: &Configuration, id: String) -> anyhow
     let bin = req.send().await?.bytes().await.expect("oi").to_vec();
     Ok(bin)
 }
-
-// pub fn
